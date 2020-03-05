@@ -1,3 +1,5 @@
+const socket = io();
+
 const canvas = document.getElementById('c');
 const context = canvas.getContext('2d');
 
