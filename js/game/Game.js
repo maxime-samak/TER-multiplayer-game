@@ -1,5 +1,3 @@
-const socket = io();
-
 const canvas = document.getElementById('c');
 const context = canvas.getContext('2d');
 
@@ -44,7 +42,8 @@ let food = [new Food(300, 300)];
 
 //--------
 
-update();
+requestAnimationFrame(update);
+
 document.addEventListener('keydown', function keyDown(e){
     switch(e.key){
         case 'z':
@@ -62,7 +61,6 @@ document.addEventListener('keydown', function keyDown(e){
         default:
             break;
     }
-    update()
 });
 
 document.addEventListener('keyup', function keyUp(e){
@@ -82,7 +80,6 @@ document.addEventListener('keyup', function keyUp(e){
         default:
             break;
     }
-    update()
 });
 
 function move(player) {
@@ -100,7 +97,6 @@ function move(player) {
 
 setInterval(function(){
     food.push(new Food(Math.floor(Math.random() * w), Math.floor(Math.random() * h)));
-    update()
 }, 1000);
 
 //--------
@@ -123,7 +119,8 @@ function reset(){
     context.fillRect(0, 0, w, h)
 }
 
-function update(){
+function update(time){
+
     if(!gameOver && player.score < diff){
         if(food.length >= maxFood){
             gameOver = true
@@ -155,4 +152,5 @@ function update(){
         reset();
         write('YOU WIN', w/2-20, h/2)
     }
+    requestAnimationFrame(update);
 }
