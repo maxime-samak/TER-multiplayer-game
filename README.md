@@ -37,4 +37,6 @@ L’implémentation sera en NodeJS/Socket.io côté serveur, et libre côté cli
 
 ## Quick Start
 
-[WIP]
+Dans la console à la racine du projet :  
+**npm install** pour installer les dépendances ([Express](https://expressjs.com/), et [socket.io](https://socket.io/)).  
+**npm start** pour lancer l'application sur le [port 3000](localhost:3000/).
