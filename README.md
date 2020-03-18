@@ -31,7 +31,43 @@ L’implémentation sera en NodeJS/Socket.io côté serveur, et libre côté cli
 - VASSEUR Adrien
 - SAMAK Maxime
 
-## Milestones
+## [Milestones](https://github.com/maxime-samak/TER-multiplayer-game/milestones)
+
+### [Milestone 1](https://github.com/maxime-samak/TER-multiplayer-game/milestone/1)
+#### Objectifs de livraison
+- [ ] Analyse du sujet
+- [ ] Mise en place d'une première version du jeu proposé (dans un but de démonstration)
+- [ ] Mise en place d'un serveur Socket.io
+- [ ] Création d'un github et découpage des tâches à réaliser
+
+### [Milestone 1.2](https://github.com/maxime-samak/TER-multiplayer-game/milestone/2)
+#### Objectifs de livraison
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
+
+### [Milestone 2](https://github.com/maxime-samak/TER-multiplayer-game/milestone/3)
+#### Objectifs de livraison
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
+
+### [Milestone 3](https://github.com/maxime-samak/TER-multiplayer-game/milestone/4)
+#### Objectifs de livraison
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
+
+### [Milestone 4](https://github.com/maxime-samak/TER-multiplayer-game/milestone/5)
+#### Objectifs de livraison
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
+
 
 [WIP]
 
