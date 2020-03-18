@@ -73,4 +73,5 @@ L’implémentation sera en NodeJS/Socket.io côté serveur, et libre côté cli
 
 Dans la console à la racine du projet :  
 **npm install** pour installer les dépendances ([Express](https://expressjs.com/), et [socket.io](https://socket.io/)).  
-**npm start** pour lancer l'application sur le [port 3000](http://localhost:3000/).
+**npm start** pour lancer le serveur sur le [port 3000](http://localhost:3000/).
+Enfin taper localhost:3000 sur un navigateur pour ouvrir un client en local.

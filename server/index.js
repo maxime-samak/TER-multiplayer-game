@@ -9,7 +9,7 @@ const io = socketio(server);
 
 // Port 3000
 const port = process.env.PORT || 3000;
-const publicDirectoryPath = path.join(__dirname, "..", "js", "game");
+const publicDirectoryPath = path.join(__dirname, "..", "js");
 
 app.use(express.static(publicDirectoryPath));
 
