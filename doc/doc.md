@@ -20,5 +20,8 @@ Un grand nombre de modules sont disponibles pour Node.js et parmi ces derniers o
 ## Utilisation et "quick start"
 Toutes les étapes de l’utilisation du projet seront disponibles [ici](https://github.com/maxime-samak/TER-multiplayer-game#quick-start).
 
-##
+## Notes et références
+Cette étude est basé en partie sur les travaux de [Sven Bergström](https://underscorediscovery.com/#home)
+
+[Références complémentaires](https://github.com/maxime-samak/TER-multiplayer-game/blob/master/doc/ref.md)
 
