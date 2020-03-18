@@ -7,10 +7,13 @@ Une phrase courte pourra ou non accompagner un document, de manière à présent
 ## Liste des références
 
 Guideline générale pour le projet.
-- http://buildnewgames.com/real-time-multiplayer/
+- [real time multiplayer](http://buildnewgames.com/real-time-multiplayer/)
 
 Démo.
-- https://battle-world.herokuapp.com/?debug
+- [demo](https://battle-world.herokuapp.com/?debug)
+
+Jeu web pris pour référence.
+- [agar.io](https://agar.io/)
 
 La mesure de la latence coté client n'est pas fiable suivant le browser utilisé, une mesure coté serveur est préférable.
 - [Javascript timestamps are inaccurate](https://johnresig.com/blog/accuracy-of-javascript-time/)
