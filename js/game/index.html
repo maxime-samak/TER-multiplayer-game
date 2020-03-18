@@ -7,12 +7,37 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
         <title>TER</title>
         <meta name="description" content="TER game" />
+
+        <link rel="stylesheet" type="text/css" href="../css/overlay.css" />
+        <!-- p5.js library -->
         <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
     </head>
 
     <body>
-        <canvas id="c" width="640px" height="480px" style="border: 1px solid black;"></canvas>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="Game.js"></script>
+        <!-- The overlay -->
+        <div id="metrics" class="overlay">
+
+            <!-- Button to close the overlay navigation -->
+            <a href="#" class="closebtn" onclick="closeNav()">&times;</a>
+
+            <!-- Overlay content -->
+            <div class="overlay-content">
+                <span id="latency" href="#" onclick="">Latency:</span>
+                <span id="test" href="#" onclick="">Work in progress</span>
+            </div>
+
+        </div>
+
+        <a class="openbtn" onclick="openNav()">&#10066;</a>
+
     </body>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- Game related scripts -->
+    <script src="Agar.js"></script>
+    <script src="Bubble.js"></script>
+    <!-- Other scripts -->
+    <script src="../other/Menu.js"></script>
+
 </html>
