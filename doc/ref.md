@@ -9,10 +9,13 @@ Une phrase courte pourra ou non accompagner un document, de manière à présent
 Guideline générale pour le projet.
 - http://buildnewgames.com/real-time-multiplayer/
 
+Démo.
+- https://battle-world.herokuapp.com/?debug
+
 La mesure de la latence coté client n'est pas fiable suivant le browser utilisé, une mesure coté serveur est préférable.
 - [Javascript timestamps are inaccurate](https://johnresig.com/blog/accuracy-of-javascript-time/)
 
-Game Loop, Timing explications complémentaires
+Game Loop, Timing explications complémentaires.
 - [Timing problems](https://isaacsukin.com/news/2015/01/detailed-explanation-javascript-game-loops-and-timing#timing-problems)
 
 Autre
