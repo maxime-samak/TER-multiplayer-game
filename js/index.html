@@ -8,7 +8,10 @@
         <title>TER</title>
         <meta name="description" content="TER game" />
 
+        <!-- stylesheets <>.css -->
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
         <link rel="stylesheet" type="text/css" href="css/overlay.css" />
+
         <!-- p5.js library -->
         <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
     </head>
@@ -16,14 +19,67 @@
     <body>
         <!-- The overlay -->
         <div id="metrics" class="overlay">
-
             <!-- Button to close the overlay navigation -->
             <a href="#" class="closebtn" onclick="closeNav()">&times;</a>
 
             <!-- Overlay content -->
-            <div class="overlay-content">
-                <span id="latency" href="#" onclick="">Latency:</span>
-                <span id="test" href="#" onclick="">Work in progress</span>
+            <div class="overlay-content" style="user-select: none; width: 245px;">
+                <ul style="height: auto;">
+                    <li class="folder">
+                        <div class="dg">
+                            <ul>
+                                <li class="title">Settings</li>
+
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="folder">
+                        <div class="dg">
+                            <ul>
+                                <li class="title">Connection</li>
+                                <li class="cr number">
+                                    <div><span class="property-name">latency</span>
+                                        <div class="c" data-children-count="1"><input type="text"></div>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div><span class="property-name">ping</span>
+                                        <div class="c" data-children-count="1"><input type="text"></div>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div><span class="property-name">fake_lag</span>
+                                        <div class="c" data-children-count="1"><input type="text"></div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="folder">
+                        <div class="dg">
+                            <ul>
+                                <li class="title">Networking</li>
+
+                                <li class="cr number">
+                                    <div><span class="property-name">server time</span>
+                                        <div class="c" data-children-count="1"><input type="text"></div>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div><span class="property-name">client time</span>
+                                        <div class="c" data-children-count="1"><input type="text"></div>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div><span class="property-name">net offset</span>
+                                        <div class="c" data-children-count="1"><input type="text"></div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
             </div>
 
         </div>
