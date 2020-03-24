@@ -1,5 +1,12 @@
 const socket = io();
 
+socket.on("pong", function(ms) {
+    latency = ms;
+    console.log(ms);
+    document.getElementById("latency").innerText = ms;
+});
+
+
 let bubble;
 
 let food = [];
@@ -44,7 +51,7 @@ function foodConsumption() {
         food[i].show();
 
         if (bubble.eats(food[i])) {
-            console.log("food at pos: ", food[i].position, " was eaten")
+            //console.log("food at pos: ", food[i].position, " was eaten")
             food.splice(i, 1);
         }
     }

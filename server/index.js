@@ -5,7 +5,7 @@ const socketio = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server);
+const io = socketio(server, {pingInterval: 200});
 
 // Port 3000
 const port = process.env.PORT || 3000;
@@ -16,7 +16,6 @@ app.use(express.static(publicDirectoryPath));
 io.on("connection", socket => {
     console.log(`Player ${socket.id} joined`);
 
-
     socket.on("disconnect", () => {
         console.log(`Player ${socket.id} disconnected`);
     });
@@ -25,3 +24,5 @@ io.on("connection", socket => {
 server.listen(port, () => {
     console.log(`Server started on port ${port}`);
 });
+
+
