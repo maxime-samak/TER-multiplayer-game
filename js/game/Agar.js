@@ -1,12 +1,3 @@
-const socket = io();
-
-socket.on("pong", function(ms) {
-    latency = ms;
-    console.log(ms);
-    document.getElementById("latency").innerText = ms;
-});
-
-
 let bubble;
 
 let food = [];
