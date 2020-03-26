@@ -42,8 +42,8 @@ L’implémentation sera en NodeJS/Socket.io côté serveur, et libre côté cli
 
 ### [Milestone 1.2](https://github.com/maxime-samak/TER-multiplayer-game/milestone/2)
 #### Objectifs de livraison
-- [ ] Amélioration du jeu
-- [ ] Récupération et affichage de la latence coté client
+- [x] Amélioration du jeu
+- [x] Récupération et affichage de la latence coté client
 - [ ] Plusieurs joueurs peuvent désormais se connecter sur un même serveur de jeu
 
 ### [Milestone 2](https://github.com/maxime-samak/TER-multiplayer-game/milestone/3)
