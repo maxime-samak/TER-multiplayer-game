@@ -2,6 +2,8 @@ const path = require("path");
 const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
+const {Player} = require("./player");
+const {addPlayer, removePlayer, getPlayer, getPlayers} = require("./players");
 
 const app = express();
 const server = http.createServer(app);
@@ -12,6 +14,11 @@ const port = process.env.PORT || 3000;
 const publicDirectoryPath = path.join(__dirname, "..", "js");
 
 app.use(express.static(publicDirectoryPath));
+
+setInterval(heartbeat, 200);
+function heartbeat() {
+    io.emit("heartbeat", getPlayers());
+}
 
 io.on("connection", socket => {
     let connectionStamp = Date.now();
@@ -28,8 +35,29 @@ io.on("connection", socket => {
         socket.emit("data", timeStamp, timeStamp - emitStamp, Date.now() - connectionStamp)
     });
 
+    // When client connects for the first time
+    socket.on("start", data => {
+        console.log(`ID: ${socket.id}, x: ${data.x}, y: ${data.y}, radius: ${data.radius}`);
+        const player = new Player(socket.id, data.x, data.y, data.radius, data.color);
+        addPlayer(player);
+        socket.emit("setClientId", socket.id);
+    });
+
+    //On client update, send info to the server and update
+    socket.on("update", data => {
+        const player = getPlayer(socket.id);
+        if (player !== undefined) {
+            player.updateState(data.x, data.y, data.radius);
+        } else {
+            console.log("Couldn't fetch player (undefined)");
+        }
+        //console.log(`ID: ${socket.id}, x: ${data.x}, y: ${data.y}, radius: ${data.radius}`);
+    });
+
     socket.on("disconnect", () => {
         console.log(`Player ${socket.id} disconnected`);
+        removePlayer(socket.id);
+        console.log(getPlayers());
     });
 });
 

@@ -1,4 +1,5 @@
 let bubble;
+let players = [];
 
 let food = [];
 const maxFood = 1500;
@@ -67,8 +68,29 @@ function setup() {
     corners.bottomLeft = createVector(-boundaries.width, -boundaries.height);
     corners.bottomRight= createVector(boundaries.width, -boundaries.height);
 
-    bubble = new Bubble(0, 0, 64);
-    foodSetup();
+    //bubble = new Bubble(random(boundaries.width), random(boundaries.height), 64);
+    bubble = new Bubble(-3000, -3000, 64);
+    //foodSetup();
+    const data = {
+        x: bubble.position.x,
+        y: bubble.position.y,
+        radius: bubble.radius,
+        color: {
+            r: bubble.r,
+            g: bubble.g,
+            b: bubble.b
+        }
+    };
+    socket.emit("start", data);
+
+    socket.on("setClientId", id => {
+        bubble.id = id;
+    });
+
+    socket.on("heartbeat", data => {
+        console.log(data);
+        players = data;
+    })
 }
 
 function draw() {
@@ -78,6 +100,22 @@ function draw() {
 
     bubble.show();
     bubble.update(boundaries);
+    for (let i=0 ; i<players.length; i++) {
+        if (players[i].id !== bubble.id) {
+            fill(players[i].color.r, players[i].color.g, players[i].color.b);
+            ellipse(players[i].x, players[i].y, players[i].radius * 2);
+        }
+    }
+
+    const data = {
+        x: bubble.position.x,
+        y: bubble.position.y,
+        radius: bubble.radius
+    };
+    socket.emit("update", data);
+
+    foodManagement();
+    foodConsumption();
 
     foodManagement();
     foodConsumption();
