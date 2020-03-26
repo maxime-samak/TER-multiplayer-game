@@ -77,7 +77,7 @@ function draw() {
     canvasTranslation();
 
     bubble.show();
-    bubble.update();
+    bubble.update(boundaries);
 
     foodManagement();
     foodConsumption();

@@ -15,12 +15,21 @@ function Bubble(x, y, radius) {
         return false;
     };
 
-    this.update = function() {
+    this.update = function(boudaries) {
 
 
         let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
         newPosition.setMag(4);
         this.position.add(newPosition);
+        if(this.position.x+this.radius>boudaries.width)
+            this.position.x=boudaries.width-this.radius;
+        else if (this.position.x-this.radius<-boudaries.width)
+            this.position.x=-boudaries.width+this.radius;
+        if(this.position.y+this.radius>boudaries.height)
+            this.position.y=boudaries.height-this.radius;
+        else if (this.position.y-this.radius<-boudaries.height)
+            this.position.y=-boudaries.height+this.radius;
+
     };
 
     this.show = function() {
