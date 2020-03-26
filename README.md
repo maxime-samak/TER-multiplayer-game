@@ -54,7 +54,7 @@ L’implémentation sera en NodeJS/Socket.io côté serveur, et libre côté cli
 
 ### [Milestone 3](https://github.com/maxime-samak/TER-multiplayer-game/milestone/4)
 #### Objectifs de livraison
-- [ ] 
+- [ ] Mise en place de graphiques pour visualiser la latence
 - [ ] 
 - [ ] 
 - [ ] 
@@ -66,8 +66,6 @@ L’implémentation sera en NodeJS/Socket.io côté serveur, et libre côté cli
 - [ ] 
 - [ ] 
 
-
-[WIP]
 
 ## Quick Start
 
