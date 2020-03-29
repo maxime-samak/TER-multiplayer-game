@@ -4,6 +4,7 @@ const express = require("express");
 const socketio = require("socket.io");
 const {Player} = require("./player");
 const {addPlayer, removePlayer, getPlayer, getPlayers} = require("./players");
+const {removeFood, addFood, getFoodList, foodManagement} = require("./food");
 
 const app = express();
 const server = http.createServer(app);
@@ -15,7 +16,7 @@ const publicDirectoryPath = path.join(__dirname, "..", "js");
 
 app.use(express.static(publicDirectoryPath));
 
-setInterval(heartbeat, 200);
+setInterval(heartbeat, 100);
 function heartbeat() {
     io.emit("heartbeat", getPlayers());
 }
@@ -41,6 +42,7 @@ io.on("connection", socket => {
         const player = new Player(socket.id, data.x, data.y, data.radius, data.color);
         addPlayer(player);
         socket.emit("setClientId", socket.id);
+        socket.emit("sendFoodList", getFoodList());
     });
 
     //On client update, send info to the server and update
@@ -52,6 +54,14 @@ io.on("connection", socket => {
             console.log("Couldn't fetch player (undefined)");
         }
         //console.log(`ID: ${socket.id}, x: ${data.x}, y: ${data.y}, radius: ${data.radius}`);
+    });
+
+    // When a client eats a food point
+    socket.on("clientEatsFood", foodId => {
+        if (removeFood(foodId) !== -1) {
+            const newFood = addFood();
+            io.emit("sendFoodList", getFoodList());
+        }
     });
 
     socket.on("disconnect", () => {

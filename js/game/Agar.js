@@ -39,13 +39,18 @@ function foodManagement() {
 
 /* Manage the process of food being eaten by a player */
 function foodConsumption() {
+    let tempId = -1;
     for (var i = food.length - 1; i >= 0; i--) {
         food[i].show();
-
         if (bubble.eats(food[i])) {
             //console.log("food at pos: ", food[i].position, " was eaten")
+            tempId = food[i].id; // Get the food id, send it to the server to process
             food.splice(i, 1);
+
         }
+    }
+    if (tempId !== -1) {
+        socket.emit("clientEatsFood", tempId);
     }
 }
 
@@ -87,8 +92,18 @@ function setup() {
         bubble.id = id;
     });
 
+    socket.on("sendFoodList", foodList => {
+        food = [];
+        for (let i=0 ; i<foodList.length ; i++) {
+            const tempBubble = new Bubble(foodList[i].x, foodList[i].y, foodList[i].radius, foodList[i].color.r, foodList[i].color.g, foodList[i].color.b);
+            tempBubble.id = foodList[i].id;
+            food.push(tempBubble);
+        }
+        console.log(food.length);
+    });
+
     socket.on("heartbeat", data => {
-        console.log(data);
+        // console.log(data);
         players = data;
     })
 }
@@ -100,6 +115,7 @@ function draw() {
 
     bubble.show();
     bubble.update(boundaries);
+
     for (let i=0 ; i<players.length; i++) {
         if (players[i].id !== bubble.id) {
             fill(players[i].color.r, players[i].color.g, players[i].color.b);
@@ -114,10 +130,10 @@ function draw() {
     };
     socket.emit("update", data);
 
-    foodManagement();
-    foodConsumption();
+    // foodManagement();
+    // foodConsumption();
 
-    foodManagement();
+    // foodManagement();
     foodConsumption();
 
     /* Visual representation of the boundaries of the map */

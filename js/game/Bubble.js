@@ -1,9 +1,9 @@
-function Bubble(x, y, radius) {
+function Bubble(x, y, radius, r = random(255), g = random(255), b = random(255)) {
     this.position = createVector(x, y);
     this.radius = radius;
-    this.r = random(255);
-    this.g = random(255);
-    this.b = random(255);
+    this.r = r;
+    this.g = g;
+    this.b = b;
 
     this.eats = function(food) {
         let distance = p5.Vector.dist(this.position, food.position);
