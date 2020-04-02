@@ -102,6 +102,21 @@ function setup() {
         console.log(food.length);
     });
 
+    socket.on("kill", data => {
+        // console.log(data);
+        if(data.id==socket.id)
+            bubble.radius=data.radius;
+    });
+
+    socket.on("death", data => {
+        // console.log(data);
+        if(data.id==socket.id) {
+            bubble.x = data.x;
+            bubble.y = data.y;
+            bubble.radius = data.radius;
+        }
+    });
+
     socket.on("heartbeat", data => {
         // console.log(data);
         players = data;

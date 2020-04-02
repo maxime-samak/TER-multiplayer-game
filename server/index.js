@@ -18,6 +18,27 @@ app.use(express.static(publicDirectoryPath));
 
 setInterval(heartbeat, 100);
 function heartbeat() {
+    players = getPlayers();
+    for(let i = 0; i < players.length-1 ; i++){
+        for(let j = i+1; j < players.length ; j++){
+            let distance = (Math.sqrt(Math.pow(players[j].x-players[i].x,2)+Math.pow(players[j].y-players[i].y,2)));
+            let surfaceArea = (Math.PI * (players[i].radius ** 2)) + (Math.PI  * (players[j].radius ** 2));
+            if (distance < players[i].radius && players[i].radius > players[j].radius && players[j].radius > 64)
+            {
+                players[i].updateState(players[i].x,players[i].y,Math.sqrt(surfaceArea / Math.PI));
+                players[j].updateState(-3000,3000,64);
+                io.emit("death", players[j]);
+                io.emit("kill", players[i]);
+            }
+            else if(distance < players[j].radius && players[i].radius < players[j].radius && players[i].radius > 64)
+            {
+                players[j].updateState(players[j].x,players[j].y,Math.sqrt(surfaceArea / Math.PI));
+                players[i].updateState(-3000,3000,64);
+                io.emit("death", players[i]);
+                io.emit("kill", players[j]);
+            }
+        }
+    }
     io.emit("heartbeat", getPlayers());
 }
 
