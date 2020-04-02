@@ -10,7 +10,7 @@ socket.on("ping", function(ms) {
 socket.on("data", function(timeStamp, ping, serverTime) {
     document.getElementById("latency").innerText = ~~(ping / 2) + " ms";
     document.getElementById("ping").innerText = ping + " ms";
-    pings.push(ping);
+    pings.push({x :(Date.now() - connectionStamp) / 1000, y: ping} );
 
     document.getElementById("server-time").innerText = serverTime / 1000 + " s";
     document.getElementById("client-time").innerText = (Date.now() - connectionStamp) / 1000 + " s";
@@ -26,19 +26,31 @@ function circularBuffer(size) {
 
     let bufferSize = size;
     let buffer = new Array(bufferSize);
+    buffer.fill({x:0, y:0});
 
+    let last = 0;
     let end = 0;
 
     // Adds values to array in circular.
     this.push = function(obj) {
         buffer[end] = obj;
-        if (end != bufferSize) end++; // advance
-        else end = 0;
+        if (end >= bufferSize) {
+            last = bufferSize - 1;
+            end = 0;
+        } // advance
+        else {
+            last = end;
+            end++;
+        }
     };
 
     // Returns a value from the buffer
     this.get = function(index) {
         return buffer[index % bufferSize];
+    };
+
+    this.last = function() {
+        return buffer[last]
     };
 
     // Returns true if the buffer has been initialized.
