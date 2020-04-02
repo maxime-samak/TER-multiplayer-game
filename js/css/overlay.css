@@ -1,5 +1,4 @@
 .overlay {
-    /* Height & width depends on how you want to reveal the overlay (see JS below) */
     height: 100%;
     width: 0;
     position: fixed; /* Stay in place */
@@ -14,10 +13,10 @@
 /* Position the content inside the overlay */
 .overlay-content {
     position: relative;
-    top: 10%; /* 25% from the top */
-    width: 100%; /* 100% width */
-    text-align: left; /* Centered text/links */
-    margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+    top: 10%; /* 10% from the top */
+    width: 90%; /* 100% width */
+    margin: auto;
+    text-align: left;
 }
 
 /* The navigation links inside the overlay */
@@ -79,7 +78,8 @@ a:hover, a:focus {
 
 .dg li:not(.folder) {
     cursor: auto;
-    height: 27px;
+    height: auto; /*  ???? */
+    width: 100%;
     line-height: 27px;
     overflow: hidden;
     padding: 0 4px 0 5px
@@ -107,6 +107,7 @@ a:hover, a:focus {
 .dg .c {
     float:left;
     width:60%;
+    height: auto;
 }
 
 .dg .c input[type=text] {
@@ -119,5 +120,4 @@ a:hover, a:focus {
 
 /* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
 @media screen and (max-height: 450px) {
-    .overlay a {font-size: 20px}
 }
