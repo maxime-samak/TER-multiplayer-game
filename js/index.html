@@ -14,16 +14,24 @@
 
         <!-- p5.js library -->
         <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
+
+        <!-- canvasjs.js library -->
+        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
     </head>
 
     <body>
+        <div id="game">
+            <!-- Our game canvas is here -->
+        </div>
+
         <!-- Overlay -->
         <div id="metrics" class="overlay">
             <!-- Button to close the overlay navigation -->
             <a href="#" class="closebtn" onclick="closeNav()">&times;</a>
 
             <!-- Overlay content -->
-            <div class="overlay-content" style="user-select: none; width: 245px;">
+            <div class="overlay-content" style="user-select: none;">
                 <ul style="height: auto;">
                     <li class="folder">
                         <div class="dg">
@@ -41,19 +49,22 @@
                                 <li class="cr number">
                                     <div>
                                         <span class="property-name">latency</span>
-                                        <div id="latency" class="c" data-children-count="1"><input type="text"></div>
+                                        <div id="latency" class="c" data-children-count="1">n/a</div>
                                     </div>
                                 </li>
                                 <li class="cr number">
                                     <div>
                                         <span class="property-name">RTT (ping)</span>
-                                        <div id="ping" class="c" data-children-count="1"><input type="text"></div>
+                                        <div id="ping" class="c" data-children-count="1">n/a</div>
                                     </div>
                                 </li>
                                 <li class="cr number">
                                     <div>
                                         <span class="property-name">fake_lag</span>
-                                        <div class="c" data-children-count="1"><input type="text"></div>
+                                        <div id="chart" class="c" style="height: 100px; width:100%; background-color: #f1f1f1">
+                                            <canvas id="canvass" height="200"></canvas>
+                                        </div>
+                                        <!-- <div class="c" data-children-count="1"><input type="text"></div> -->
                                     </div>
                                 </li>
                             </ul>
@@ -86,7 +97,6 @@
                     </li>
                 </ul>
             </div>
-
         </div>
 
         <a class="openbtn" onclick="openNav()">&#10066;</a>
@@ -101,6 +111,6 @@
 
     <!-- Other scripts -->
     <script src="other/Client.js"></script>
-    <script src="other/Menu.js"></script>
+    <script src="other/Menu.js" ></script>
 
 </html>
