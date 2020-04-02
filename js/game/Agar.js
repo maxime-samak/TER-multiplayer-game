@@ -65,7 +65,7 @@ function canvasTranslation() {
 
 
 function setup() {
-    createCanvas(800, 800);
+    createCanvas(windowWidth * 0.6, windowHeight * 0.8);
 
     /* to fix later: wrong names */
     corners.topLeft = createVector(-boundaries.width, boundaries.height);
@@ -116,7 +116,7 @@ function draw() {
     bubble.show();
     bubble.update(boundaries);
 
-    for (let i=0 ; i<players.length; i++) {
+    for (let i = 0 ; i < players.length; i++) {
         if (players[i].id !== bubble.id) {
             fill(players[i].color.r, players[i].color.g, players[i].color.b);
             ellipse(players[i].x, players[i].y, players[i].radius * 2);
@@ -144,4 +144,8 @@ function draw() {
     line(corners.bottomRight.x, corners.bottomRight.y, corners.bottomLeft.x, corners.bottomLeft.y);
     line(corners.bottomLeft.x, corners.bottomLeft.y, corners.topLeft.x, corners.topLeft.y);
     strokeWeight(1)
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth * 0.8, windowHeight * 0.9);
 }
