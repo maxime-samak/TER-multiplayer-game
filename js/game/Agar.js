@@ -74,7 +74,8 @@ function spectatorMode() {
 
 
 function setup() {
-    createCanvas(windowWidth * 0.6, windowHeight * 0.8);
+    let canvas = createCanvas(windowWidth * 0.6, windowHeight * 0.8);
+    canvas.parent('game');
 
     /* to fix later: wrong names */
     corners.topLeft = createVector(-boundaries.width, boundaries.height);
