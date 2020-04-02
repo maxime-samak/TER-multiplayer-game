@@ -28,6 +28,7 @@ function heartbeat() {
                 players[i].updateState(players[i].x,players[i].y,Math.sqrt(surfaceArea / Math.PI));
                 players[j].updateState(-3000,3000,64);
                 io.emit("death", players[j]);
+                removePlayer(players[j].id);
                 io.emit("kill", players[i]);
             }
             else if(distance < players[j].radius && players[i].radius < players[j].radius && players[i].radius > 64)
@@ -35,6 +36,7 @@ function heartbeat() {
                 players[j].updateState(players[j].x,players[j].y,Math.sqrt(surfaceArea / Math.PI));
                 players[i].updateState(-3000,3000,64);
                 io.emit("death", players[i]);
+                removePlayer(players[i].id);
                 io.emit("kill", players[j]);
             }
         }

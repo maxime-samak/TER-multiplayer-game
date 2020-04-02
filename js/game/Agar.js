@@ -5,6 +5,7 @@ let food = [];
 const maxFood = 1500;
 
 let currentScale = 1;
+let alive = true;
 
 /* The map size (not related with the canvas size) */
 let boundaries = {
@@ -63,6 +64,14 @@ function canvasTranslation() {
     translate(- bubble.position.x, - bubble.position.y);
 }
 
+function spectatorMode() {
+    translate(width / 2 , height / 2);
+    scale(currentScale);
+    textSize(500)
+    fill(255);
+    text("Spectator Mode", -1500, 3500);
+}
+
 
 function setup() {
     createCanvas(windowWidth * 0.6, windowHeight * 0.8);
@@ -111,9 +120,9 @@ function setup() {
     socket.on("death", data => {
         // console.log(data);
         if(data.id==socket.id) {
-            bubble.x = data.x;
-            bubble.y = data.y;
-            bubble.radius = data.radius;
+            alive = false;
+            currentScale = 0.08;
+
         }
     });
 
@@ -126,10 +135,30 @@ function setup() {
 function draw() {
     background(0);
 
-    canvasTranslation();
+   if(!alive){
+       spectatorMode();
+       food.forEach(foodBubble => foodBubble.show());
+   }
 
-    bubble.show();
-    bubble.update(boundaries);
+    if(alive) {
+        canvasTranslation();
+        bubble.show();
+        bubble.update(boundaries);
+
+        const data = {
+            x: bubble.position.x,
+            y: bubble.position.y,
+            radius: bubble.radius
+        };
+        socket.emit("update", data);
+
+        // foodManagement();
+        // foodConsumption();
+
+        // foodManagement();
+        foodConsumption();
+    }
+
 
     for (let i = 0 ; i < players.length; i++) {
         if (players[i].id !== bubble.id) {
@@ -138,18 +167,6 @@ function draw() {
         }
     }
 
-    const data = {
-        x: bubble.position.x,
-        y: bubble.position.y,
-        radius: bubble.radius
-    };
-    socket.emit("update", data);
-
-    // foodManagement();
-    // foodConsumption();
-
-    // foodManagement();
-    foodConsumption();
 
     /* Visual representation of the boundaries of the map */
     stroke(255);
