@@ -1,3 +1,13 @@
+/**
+ * This class represents a bubble in our game (a player / food)
+ * @param x Spawning position on x axis
+ * @param y Spawning position on y axis
+ * @param radius Starting radius
+ * @param r Color
+ * @param g Color
+ * @param b Color
+ * @constructor Create a bubble on the canvas
+ */
 function Bubble(x, y, radius, r = random(255), g = random(255), b = random(255)) {
     this.position = createVector(x, y);
     this.radius = radius;
