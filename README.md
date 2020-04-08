@@ -51,7 +51,7 @@ L’implémentation sera en NodeJS/Socket.io côté serveur, et libre côté cli
 - [ ] Amélioration du jeu
 - [ ] Mise en place d'algorithmes de prévision de mouvements coté client
 - [ ] Mise en place d'algorithmes de correction de latence
-- [ ] Mise en place de graphiques pour visualiser la latence
+- [x] Mise en place de graphiques pour visualiser la latence
 
 ### [Milestone 3](https://github.com/maxime-samak/TER-multiplayer-game/milestone/4)
 #### Objectifs de livraison
