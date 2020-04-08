@@ -9,24 +9,43 @@ function closeNav() {
 }
 
 function charts() {
-    var ctx = document.getElementById("canvass").getContext("2d");
-    ctx.arc(1 , - 1, 3, 0, Math.PI * 2, true);
-    ctx.translate(10, 90);
-    ctx.fillStyle = "#ff2626"; // Red color
-    let i = 0;
-    setInterval(
-        () => {
-            ctx.beginPath();
-            ctx.arc(i * 10, - parseInt((pings.last().y)), 3, 0, Math.PI * 2, true);
-            ctx.fill();
-            if (i == 30) {
-                ctx.clearRect(-10, -100, canvas.width, canvas.height );
-                console.log("cleared");
-                i = 0;
-            }
-            i++
+    let ctx = document.getElementById('myChart').getContext('2d');
+    let chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [{
+                label: 'RTT (s)',
+                data: pings.data(),
+                borderColor: "rgba(68, 108, 179, 1)"
+            }]
+        },
+        options: {
+            events: [],
+            tooltips: {enabled: false},
+            hover: {mode: null},
+            scales: {
+                xAxes: [{
+                    position: 'bottom',
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Time (s)'
+                    }
+                }],
 
-        },500
-    )
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    },
+
+                }]
+            }
+        }
+    });
+
+    setInterval(() => {
+        chart.data.datasets[0].data = pings.data();
+        chart.data.labels = pings.dataX();
+        chart.update();
+    }, 500)
 }
-charts()
+charts();
