@@ -1,7 +1,8 @@
 # TER développement d'un jeu multijoueur
 
 ## Introduction 
-### [WIP]
+
+Le but de ce TER est de mettre en place des algorithmes de détection et de correction de latance, sur un jeur multijoueurs réactif en ligne, puis de tester leurs efficacité et leurs limites. Pour ce faire nous avons recréer un jeu de type "argar.io" et allons travailler dessus. Nous utiliserons des algoritmes tel que "Client prediction" et "Client interpolation", nous les testerons avec des latences élévées et/ou variables, ainsi qu'avec une multitudes de joueurs pour découvrir leurs limites.
 
 ## Technologies utilisés
 
@@ -22,7 +23,11 @@ Un grand nombre de modules sont disponibles pour Node.js et parmi ces derniers o
 Toutes les étapes de l’utilisation du projet seront disponibles [ici](https://github.com/maxime-samak/TER-multiplayer-game#quick-start).
 
 ## Jeu multijoueurs en temps réel
-### [WIP]
+Un jeu multijoueur dis "en temps réel" est un jeu ou les joueurs jouent simultanément, ainsi si l'un se déplace, il doit se déplacé "instentanément" aussi sur les écrans des autres joueurs. Ex : FPS, agario..
+
+#### Networking serveur-client
+Notre façon de gérer les connections est assez simple. Pour commencer nous allumons le serveur, ensuite chaque client qui s'allume se connectera et s'attribue une "bulle",il envoie alors son nom et sa bulle au serveur. La liste des joueurs est mise à jour avec cette nouvelle bulle par le serveur, il l'enverra alors la nouvelle liste a tout le joueur qui recevrons les informations de cette nouvelle bulle (position, taille, couleur). Pendant la partie, les clients continue d'envoyer leurs informations, et le serveur continue de mettre a jour ses données et de les distribuer a tous les joueurs.
+
 
 ## Le jeu à proprement parler
 La création d'un jeu simple, nécessitant une connexion à un serveur en temps réel a été l'une des premières étapes abordées lors de ce TER.
@@ -46,6 +51,8 @@ A 30 fps on a donc un delta d'environ 33.3ms, et à 60 fps on obtient environ 16
 
 Si cet exemple porte uniquement sur les frames rate il ne faut pas oublier que le même principe devrait être appliqué pour toutes valeurs subissant un changement au cours du temps de manière a assurer une cohérence du jeu pour ses joueurs.
 
+### Modulité
+Dans notre jeu ce situe a droite un menu, celui si permets de modulé les variables du client afin de pouvoir tester nos algorithmes à la volée. Ainsi il nous sera possible de simulé, dans le client, des paramètre comme la variation de latence.
 
 
 ## Notes et références
