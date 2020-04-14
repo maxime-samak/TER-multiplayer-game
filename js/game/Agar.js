@@ -15,29 +15,6 @@ let boundaries = {
 
 let corners = {};
 
-/* Manage the initial setup of foods on the map */
-function foodSetup() {
-    for (var i = 0; i < maxFood; i++) {
-        let radius = random(12, 15);
-        let x = random(- boundaries.width + radius, boundaries.width - radius);
-        let y = random(- boundaries.height + radius, boundaries.height - radius);
-        food[i] = new Bubble(x, y, radius);
-    }
-}
-
-/* Manage de refresh rate of the foods on the map */
-function foodManagement() {
-    let foodNumber = food.length;
-    let newFood = random(foodNumber, maxFood);
-
-    for (var i = foodNumber; i < newFood; i++) {
-        let radius = random(12, 20);
-        let x = random(- boundaries.width + radius, boundaries.width - radius);
-        let y = random(- boundaries.height + radius, boundaries.height - radius);
-        food[i] = new Bubble(x, y, radius);
-    }
-}
-
 /* Manage the process of food being eaten by a player */
 function foodConsumption() {
     let tempId = -1;
@@ -67,7 +44,7 @@ function canvasTranslation() {
 function spectatorMode() {
     translate(width / 2 , height / 2);
     scale(currentScale);
-    textSize(500)
+    textSize(500);
     fill(255);
     text("Spectator Mode", -1500, 3500);
 }
@@ -86,6 +63,7 @@ function setup() {
     //bubble = new Bubble(random(boundaries.width), random(boundaries.height), 64);
     bubble = new Bubble(-3000, -3000, 64);
     //foodSetup();
+
     const data = {
         x: bubble.position.x,
         y: bubble.position.y,
@@ -96,41 +74,8 @@ function setup() {
             b: bubble.b
         }
     };
-    socket.emit("start", data);
+    send("start", data);
 
-    socket.on("setClientId", id => {
-        bubble.id = id;
-    });
-
-    socket.on("sendFoodList", foodList => {
-        food = [];
-        for (let i=0 ; i<foodList.length ; i++) {
-            const tempBubble = new Bubble(foodList[i].x, foodList[i].y, foodList[i].radius, foodList[i].color.r, foodList[i].color.g, foodList[i].color.b);
-            tempBubble.id = foodList[i].id;
-            food.push(tempBubble);
-        }
-        console.log(food.length);
-    });
-
-    socket.on("kill", data => {
-        // console.log(data);
-        if(data.id==socket.id)
-            bubble.radius=data.radius;
-    });
-
-    socket.on("death", data => {
-        // console.log(data);
-        if(data.id==socket.id) {
-            alive = false;
-            currentScale = 0.08;
-
-        }
-    });
-
-    socket.on("heartbeat", data => {
-        // console.log(data);
-        players = data;
-    })
 }
 
 function draw() {
@@ -151,15 +96,10 @@ function draw() {
             y: bubble.position.y,
             radius: bubble.radius
         };
-        socket.emit("update", data);
 
-        // foodManagement();
-        // foodConsumption();
-
-        // foodManagement();
+        send("update", data);
         foodConsumption();
     }
-
 
     for (let i = 0 ; i < players.length; i++) {
         if (players[i].id !== bubble.id) {
@@ -167,7 +107,6 @@ function draw() {
             ellipse(players[i].x, players[i].y, players[i].radius * 2);
         }
     }
-
 
     /* Visual representation of the boundaries of the map */
     stroke(255);

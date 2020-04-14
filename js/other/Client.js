@@ -3,6 +3,10 @@ const connectionStamp = Date.now();
 
 let pings = new circularBuffer(10);
 
+function send(msg, data) {
+    socket.emit(msg, data)
+}
+
 socket.on("ping", function(ms) {
     socket.emit("pongo");
 });
@@ -14,6 +18,35 @@ socket.on("data", function(timeStamp, ping, serverTime) {
 
     document.getElementById("server-time").innerText = serverTime / 1000 + " s";
     document.getElementById("client-time").innerText = (Date.now() - connectionStamp) / 1000 + " s";
+});
+
+socket.on("setClientId", id => {
+    bubble.id = id;
+});
+
+socket.on("sendFoodList", foodList => {
+    food = [];
+    for (let i = 0 ; i < foodList.length ; i++) {
+        const tempBubble = new Bubble(foodList[i].x, foodList[i].y, foodList[i].radius, foodList[i].color.r, foodList[i].color.g, foodList[i].color.b);
+        tempBubble.id = foodList[i].id;
+        food.push(tempBubble);
+    }
+});
+
+socket.on("kill", data => {
+    if(data.id == socket.id)
+        bubble.radius = data.radius;
+});
+
+socket.on("death", data => {
+    if(data.id == socket.id) {
+        alive = false;
+        currentScale = 0.08;
+    }
+});
+
+socket.on("heartbeat", data => {
+    players = data;
 });
 
 /**

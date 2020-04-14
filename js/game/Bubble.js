@@ -26,11 +26,10 @@ function Bubble(x, y, radius, r = random(255), g = random(255), b = random(255))
     };
 
     this.update = function(boudaries) {
-
-
         let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
         newPosition.setMag(4);
         this.position.add(newPosition);
+
         if(this.position.x+this.radius>boudaries.width)
             this.position.x=boudaries.width-this.radius;
         else if (this.position.x-this.radius<-boudaries.width)
