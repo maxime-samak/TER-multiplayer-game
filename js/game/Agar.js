@@ -21,14 +21,13 @@ function foodConsumption() {
     for (var i = food.length - 1; i >= 0; i--) {
         food[i].show();
         if (bubble.eats(food[i])) {
-            //console.log("food at pos: ", food[i].position, " was eaten")
             tempId = food[i].id; // Get the food id, send it to the server to process
             food.splice(i, 1);
 
         }
     }
     if (tempId !== -1) {
-        socket.emit("clientEatsFood", tempId);
+        send("clientEatsFood", tempId);
     }
 }
 
@@ -72,7 +71,7 @@ function setup() {
             r: bubble.r,
             g: bubble.g,
             b: bubble.b
-        }
+        },
     };
     send("start", data);
 
@@ -80,7 +79,6 @@ function setup() {
 
 function draw() {
     background(0);
-
    if(!alive){
        spectatorMode();
        food.forEach(foodBubble => foodBubble.show());
@@ -91,10 +89,13 @@ function draw() {
         bubble.show();
         bubble.update(boundaries);
 
+
         const data = {
             x: bubble.position.x,
             y: bubble.position.y,
-            radius: bubble.radius
+            radius: bubble.radius,
+            nextX: bubble.nextX,
+            nextY: bubble.nextY
         };
 
         send("update", data);
@@ -102,6 +103,7 @@ function draw() {
     }
 
     for (let i = 0 ; i < players.length; i++) {
+        interpolation(players);
         if (players[i].id !== bubble.id) {
             fill(players[i].color.r, players[i].color.g, players[i].color.b);
             ellipse(players[i].x, players[i].y, players[i].radius * 2);

@@ -23,18 +23,16 @@ function heartbeat() {
         for(let j = i+1; j < players.length ; j++){
             let distance = (Math.sqrt(Math.pow(players[j].x-players[i].x,2)+Math.pow(players[j].y-players[i].y,2)));
             let surfaceArea = (Math.PI * (players[i].radius ** 2)) + (Math.PI  * (players[j].radius ** 2));
-            if (distance < players[i].radius && players[i].radius > players[j].radius && players[j].radius > 64)
-            {
-                players[i].updateState(players[i].x,players[i].y,Math.sqrt(surfaceArea / Math.PI));
-                players[j].updateState(-3000,3000,64);
+            if (distance < players[i].radius && players[i].radius > players[j].radius && players[j].radius > 64) {
+                players[i].updateState(players[i].x, players[i].y, Math.sqrt(surfaceArea / Math.PI), players[i].nextX, players[i].nextY);
+                players[j].updateState(-3000,3000,64, -3000, 3000);
                 io.emit("death", players[j]);
                 removePlayer(players[j].id);
                 io.emit("kill", players[i]);
             }
-            else if(distance < players[j].radius && players[i].radius < players[j].radius && players[i].radius > 64)
-            {
-                players[j].updateState(players[j].x,players[j].y,Math.sqrt(surfaceArea / Math.PI));
-                players[i].updateState(-3000,3000,64);
+            else if(distance < players[j].radius && players[i].radius < players[j].radius && players[i].radius > 64) {
+                players[j].updateState(players[j].x, players[j].y, Math.sqrt(surfaceArea / Math.PI), players[i].nextX, players[i].nextY);
+                players[i].updateState(-3000,3000,64, -3000, 3000);
                 io.emit("death", players[i]);
                 removePlayer(players[i].id);
                 io.emit("kill", players[j]);
@@ -72,8 +70,9 @@ io.on("connection", socket => {
     socket.on("update", data => {
         const player = getPlayer(socket.id);
         if (player !== undefined) {
-            player.updateState(data.x, data.y, data.radius);
-        } else {
+            player.updateState(data.x, data.y, data.radius, data.nextX, data.nextY);
+        }
+        else {
             console.log("Couldn't fetch player (undefined)");
         }
         //console.log(`ID: ${socket.id}, x: ${data.x}, y: ${data.y}, radius: ${data.radius}`);
