@@ -47,13 +47,17 @@ socket.on("death", data => {
 
 socket.on("heartbeat", data => {
     players = data;
+    for(let i = 0; i < players.length; i++) {
+        players[i].interpolX = players[i].x;
+        players[i].interpolY = players[i].y;
+    }
 });
 
 /**
  *   A circular buffer class.
  *   @To push new value -> bufferObject.push(xValue, yValue);
  *   @To get the First-in value use -> bufferObject.getValue(0);
- *   @To get the Last-in value use -> bufferObject.getValue(bufferObject.length);
+ *   @To get the Last-in value use -> bufferObject.last();
  **/
 function circularBuffer(size) {
 
@@ -62,7 +66,6 @@ function circularBuffer(size) {
     buffer.fill({x:null, y:null});
 
     let last = 0;
-    let end = buffer.push({x:0.5, y:1}); // initial push for correct chart rendering
 
     // Adds values to array in circular.
     this.push = function(obj) {

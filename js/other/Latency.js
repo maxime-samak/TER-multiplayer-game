@@ -1,23 +1,26 @@
-function prediction(players) {
 
-}
 
 function interpolation(players) {
-    for(let i = 0; i < players.length; i++) {
-        if (players[i].id !== bubble.id) {
+    for (let i = 0; i < players.length; i++) {
+        if (players[i].id == bubble.id) {
+            continue;
+        }
+        else {
 
-            let currentPosition = createVector(players[i].x, players[i].y);
-            let nextPosition = createVector(players[i].nextX, players[i].nextY);
-            nextPosition.setMag(1.5);
-            currentPosition.add(nextPosition);
-            players[i].x = currentPosition.x;
-            players[i].y = currentPosition.y;
+            players[i].previousX = lerp(players[i].previousX, players[i].x, 0.10); //travel 10% of the distance per frame
+            players[i].previousY = lerp(players[i].previousY, players[i].y, 0.10); //travel 10% of the distance per frame
 
-            //players[i].x = lerp(players[i].x, players[i].nextX, 0.01);
-            //players[i].y = lerp(players[i].y, players[i].nextY, 0.01);
-
+            fill(players[i].color.r, players[i].color.g, players[i].color.b);
+            ellipse(players[i].previousX, players[i].previousY, players[i].radius * 2);
         }
     }
-
-
 }
+
+function original(players) {
+    for (let i = 0; i < players.length; i++) {
+        if (players[i].id == bubble.id) { continue; }
+        fill(players[i].color.r, players[i].color.g, players[i].color.b);
+        ellipse(players[i].x, players[i].y, players[i].radius * 2);
+    }
+}
+

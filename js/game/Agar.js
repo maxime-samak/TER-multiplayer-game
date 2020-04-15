@@ -102,13 +102,9 @@ function draw() {
         foodConsumption();
     }
 
-    for (let i = 0 ; i < players.length; i++) {
-        interpolation(players);
-        if (players[i].id !== bubble.id) {
-            fill(players[i].color.r, players[i].color.g, players[i].color.b);
-            ellipse(players[i].x, players[i].y, players[i].radius * 2);
-        }
-    }
+    interpolation(players);
+    //original(players);
+
 
     /* Visual representation of the boundaries of the map */
     stroke(255);
