@@ -12,6 +12,8 @@ function checkSettings(obj) {
     if(document.getElementById(obj.id).checked == true) {
         document.getElementById('prediction').checked = false;
         document.getElementById('interpolation').checked = false;
+        document.getElementById('default').checked = false;
+
         //document.getElementById('reconciliation').checked = false;
         document.getElementById(obj.id).checked = true;
     }

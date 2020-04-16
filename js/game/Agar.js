@@ -105,9 +105,13 @@ function draw() {
         bubble.update(boundaries);
     }
 
-    interpolation(players);
-    //original(players);
-
+    if (document.getElementById('prediction').checked) {
+        prediction(players);
+    }
+    else if (document.getElementById('prediction').checked) {
+        interpolation(players)
+    }
+    else {defaultDraw(players)}
 
     /* Visual representation of the boundaries of the map */
     stroke(255);
