@@ -40,7 +40,20 @@
                                 <li class="cr number">
                                     <div>
                                         <span class="property-name">client prediction</span>
-                                        <input type="checkbox" id="prediction" name="">
+                                        <input type="checkbox" id="prediction" name="" onclick="checkSettings(this)">
+                                    </div>
+                                </li>
+                                <!--
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">client reconciliation</span>
+                                        <input type="checkbox" id="reconciliation" name="" onclick="checkSettings(this)">
+                                    </div>
+                                </li> -->
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">client interpolation</span>
+                                        <input type="checkbox" id="interpolation" name="" onclick="checkSettings(this)">
                                     </div>
                                 </li>
                             </ul>
@@ -65,7 +78,12 @@
                                 </li>
                                 <li class="cr number">
                                     <div>
-                                        <span class="property-name">fake_lag</span>
+                                        <span class="property-name">delay</span>
+                                        <div id="delay" class="c" data-children-count="1">n/a</div>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div>
                                         <div id="chart" class="c" style="height: 150px; width:100%; background-color: #f1f1f1">
                                             <canvas id="myChart" height="150px"></canvas>
                                         </div>
