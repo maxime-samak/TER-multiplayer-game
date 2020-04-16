@@ -8,6 +8,15 @@ function closeNav() {
     document.getElementById("metrics").style.width = "0%";
 }
 
+function checkSettings(obj) {
+    if(document.getElementById(obj.id).checked == true) {
+        document.getElementById('prediction').checked = false;
+        document.getElementById('interpolation').checked = false;
+        //document.getElementById('reconciliation').checked = false;
+        document.getElementById(obj.id).checked = true;
+    }
+}
+
 function charts() {
     let ctx = document.getElementById('myChart').getContext('2d');
     let chart = new Chart(ctx, {
