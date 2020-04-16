@@ -79,12 +79,14 @@ io.on("connection", socket => {
     });
 
     // When a client eats a food point
-    socket.on("clientEatsFood", foodId => {
+    socket.on("clientEatsFood", (foodId, foodRadius) => {
         if (removeFood(foodId) !== -1) {
-            const newFood = addFood();
-            io.emit("sendFoodList", getFoodList());
+            addFood();
+            socket.emit("grow", foodRadius);
         }
     });
+
+    setInterval(() => io.emit("sendFoodList", getFoodList()), 200);
 
     socket.on("disconnect", () => {
         console.log(`Player ${socket.id} disconnected`);

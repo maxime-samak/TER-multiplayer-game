@@ -33,6 +33,8 @@ socket.on("sendFoodList", foodList => {
     }
 });
 
+socket.on("grow", foodRadius => bubble.grow(foodRadius));
+
 socket.on("kill", data => {
     if(data.id == socket.id)
         bubble.radius = data.radius;

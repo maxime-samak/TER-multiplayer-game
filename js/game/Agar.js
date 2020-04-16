@@ -18,16 +18,18 @@ let corners = {};
 /* Manage the process of food being eaten by a player */
 function foodConsumption() {
     let tempId = -1;
+    let foodRadius = -1;
     for (var i = food.length - 1; i >= 0; i--) {
         food[i].show();
         if (bubble.eats(food[i])) {
             tempId = food[i].id; // Get the food id, send it to the server to process
+            foodRadius = food[i].radius;
             food.splice(i, 1);
 
         }
     }
     if (tempId !== -1) {
-        send("clientEatsFood", tempId);
+        socket.emit("clientEatsFood", tempId, foodRadius);
     }
 }
 
@@ -73,6 +75,18 @@ function setup() {
             b: bubble.b
         },
     };
+
+    setInterval(() => {
+        const data = {
+            x: bubble.position.x,
+            y: bubble.position.y,
+            radius: bubble.radius,
+            nextX: bubble.nextX,
+            nextY: bubble.nextY
+        };
+        send("update", data);
+    }, 100);
+
     send("start", data);
 
 }
@@ -86,20 +100,9 @@ function draw() {
 
     if(alive) {
         canvasTranslation();
+        foodConsumption();
         bubble.show();
         bubble.update(boundaries);
-
-
-        const data = {
-            x: bubble.position.x,
-            y: bubble.position.y,
-            radius: bubble.radius,
-            nextX: bubble.nextX,
-            nextY: bubble.nextY
-        };
-
-        send("update", data);
-        foodConsumption();
     }
 
     interpolation(players);

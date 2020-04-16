@@ -19,12 +19,12 @@ function Bubble(x, y, radius, r = random(255), g = random(255), b = random(255))
 
     this.eats = function(food) {
         let distance = p5.Vector.dist(this.position, food.position);
-        if (distance < this.radius) {
-            let surfaceArea = (PI * (this.radius ** 2)) + (PI * (food.radius ** 2));
-            this.radius = sqrt(surfaceArea / PI);
-            return true;
-        }
-        return false;
+        return distance < this.radius;
+    };
+
+    this.grow = function(foodRadius) {
+        let surfaceArea = (PI * (this.radius ** 2)) + (PI * (foodRadius ** 2));
+        this.radius = sqrt(surfaceArea / PI);
     };
 
     this.update = function(boundaries) {

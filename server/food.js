@@ -35,10 +35,10 @@ for (let i = 0; i < maxFood; i++) {
 function removeFood(id) {
     const index = foodList.findIndex(food => food.id === id);
     if (index !== -1) {
-        console.log(`Food ${id} eaten and removed from the list, size ${foodList.length}`);
+        // console.log(`Food ${id} eaten and removed from the list, size ${foodList.length}`);
         return foodList.splice(index, 1)[0];
     } else {
-        console.log(`Error removing food (index ${id} not found), size ${foodList.length}`);
+        // console.log(`Error removing food (index ${id} not found), size ${foodList.length}`);
         return -1;
     }
 }
