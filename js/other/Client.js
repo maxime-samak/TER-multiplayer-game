@@ -1,14 +1,18 @@
 const socket = io();
 const connectionStamp = Date.now();
+let delay = 0;
 
 let pings = new circularBuffer(10);
 
 function send(msg, data) {
-    socket.emit(msg, data)
+    setTimeout(() => {
+        socket.emit(msg, data)
+    }, delay);
 }
 
 socket.on("ping", function(ms) {
     socket.emit("pongo");
+
 });
 
 socket.on("data", function(timeStamp, ping, serverTime) {
@@ -18,6 +22,14 @@ socket.on("data", function(timeStamp, ping, serverTime) {
 
     document.getElementById("server-time").innerText = serverTime / 1000 + " s";
     document.getElementById("client-time").innerText = (Date.now() - connectionStamp) / 1000 + " s";
+
+    if(~~(ping / 2) + 1 >= parseInt(document.getElementById("delay").value)) {
+        delay = 0;
+    }
+    else {
+        delay = parseInt(document.getElementById("delay").value) - ~~(ping / 2); // << << <<
+    }
+
 });
 
 socket.on("setClientId", id => {
@@ -25,34 +37,43 @@ socket.on("setClientId", id => {
 });
 
 socket.on("sendFoodList", foodList => {
-    food = [];
-    for (let i = 0 ; i < foodList.length ; i++) {
-        const tempBubble = new Bubble(foodList[i].x, foodList[i].y, foodList[i].radius, foodList[i].color.r, foodList[i].color.g, foodList[i].color.b);
-        tempBubble.id = foodList[i].id;
-        food.push(tempBubble);
-    }
+    setTimeout(() => {
+        food = [];
+        for (let i = 0 ; i < foodList.length ; i++) {
+            const tempBubble = new Bubble(foodList[i].x, foodList[i].y, foodList[i].radius, foodList[i].color.r, foodList[i].color.g, foodList[i].color.b);
+            tempBubble.id = foodList[i].id;
+            food.push(tempBubble);
+        }
+    }, delay);
+
 });
 
 socket.on("grow", foodRadius => bubble.grow(foodRadius));
 
 socket.on("kill", data => {
-    if(data.id == socket.id)
-        bubble.radius = data.radius;
+    setTimeout(() => {
+        if(data.id == socket.id)
+            bubble.radius = data.radius;
+    }, delay);
 });
 
 socket.on("death", data => {
-    if(data.id == socket.id) {
-        alive = false;
-        currentScale = 0.08;
-    }
+    setTimeout(() => {
+        if(data.id == socket.id) {
+            alive = false;
+            currentScale = 0.08;
+        }
+    }, delay);
 });
 
 socket.on("heartbeat", data => {
-    players = data;
-    for(let i = 0; i < players.length; i++) {
-        players[i].interpolX = players[i].x;
-        players[i].interpolY = players[i].y;
-    }
+    setTimeout(() => {
+        players = data;
+        for(let i = 0; i < players.length; i++) {
+            players[i].interpolX = players[i].x;
+            players[i].interpolY = players[i].y;
+        }
+    }, delay);
 });
 
 /**

@@ -108,10 +108,10 @@ function draw() {
     if (document.getElementById('prediction').checked) {
         prediction(players);
     }
-    else if (document.getElementById('prediction').checked) {
+    else if (document.getElementById('interpolation').checked) {
         interpolation(players)
     }
-    else {defaultDraw(players)}
+    else { defaultDraw(players) }
 
     /* Visual representation of the boundaries of the map */
     stroke(255);
