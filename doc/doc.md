@@ -2,7 +2,7 @@
 
 ## Introduction 
 
-Le but de ce TER est de mettre en place des algorithmes de détection et de correction de latance, sur un jeur multijoueurs réactif en ligne, puis de tester leurs efficacité et leurs limites. Pour ce faire nous avons recréer un jeu de type "argar.io" et allons travailler dessus. Nous utiliserons des algoritmes tel que "Client prediction" et "Client interpolation", nous les testerons avec des latences élévées et/ou variables, ainsi qu'avec une multitudes de joueurs pour découvrir leurs limites.
+Le but de ce TER est de mettre en place des algorithmes de détection et de correction de latence, sur un jeu multijoueur réactif en ligne, puis de tester leurs efficacités et leurs limites. Pour ce faire nous avons recréer un jeu de type "argar.io" et allons travailler dessus. Nous utiliserons des algoritmes tel que "Client prediction" et "Client interpolation", nous les testerons avec des latences élevées et/ou variables, ainsi qu'avec une multitude de joueurs pour découvrir leurs limites.
 
 ## Technologies utilisés
 
@@ -19,8 +19,12 @@ Un grand nombre de modules sont disponibles pour Node.js et parmi ces derniers o
 ### p5.js
 [p5.js](https://p5js.org/) est une librairie permettant une certaine facilité dans le développement de contenu créatif, ainsi elle est tout indiqué pour l'élaboration d'un jeu.
 
+### Heroku
+[Heroku](https://www.heroku.com/) est une plateforme d'hébergement orientée cloud, qui nous permet d'héberger notre projet Node.js sur un serveur distant, permettant un réel impact sur les vitesses de connections et le multijoueurs de notre projet.
+
 ## Utilisation et "quick start"
 Toutes les étapes de l’utilisation du projet seront disponibles [ici](https://github.com/maxime-samak/TER-multiplayer-game#quick-start).
+Le projet est utilisable en ligne [ici](https://ter-jeux-multijoueurs.herokuapp.com/).
 
 ## Jeu multijoueurs en temps réel
 Un jeu multijoueur dis "en temps réel" est un jeu ou les joueurs jouent simultanément, ainsi si l'un se déplace, il doit se déplacé "instentanément" aussi sur les écrans des autres joueurs. Ex : FPS, agario..
@@ -52,7 +56,7 @@ A 30 fps on a donc un delta d'environ 33.3ms, et à 60 fps on obtient environ 16
 Si cet exemple porte uniquement sur les frames rate il ne faut pas oublier que le même principe devrait être appliqué pour toutes valeurs subissant un changement au cours du temps de manière a assurer une cohérence du jeu pour ses joueurs.
 
 ### Modulité
-Dans notre jeu ce situe a droite un menu, celui si permets de modulé les variables du client afin de pouvoir tester nos algorithmes à la volée. Ainsi il nous sera possible de simulé, dans le client, des paramètre comme la variation de latence.
+Dans notre jeu se situe a droite un menu, celui si permets de moduler les variables du client afin de pouvoir tester nos algorithmes à la volée. Ainsi il nous sera possible de simuler, dans le client, des paramètres comme la variation de latence.
 
 
 ## Notes et références
