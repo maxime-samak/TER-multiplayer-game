@@ -29,7 +29,7 @@ function Bubble(x, y, radius, r = random(255), g = random(255), b = random(255))
 
     this.update = function(boundaries) {
         let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
-        newPosition.setMag(4);
+        newPosition.setMag(4 * (delta / 10));
         this.position.add(newPosition);
 
         let nextPosition = createVector(mouseX - width / 2, mouseY - height / 2);

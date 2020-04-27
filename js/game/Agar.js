@@ -4,6 +4,7 @@ let players = [];
 let food = [];
 const maxFood = 1500;
 
+let delta = 1;
 let currentScale = 1;
 let alive = true;
 
@@ -92,6 +93,8 @@ function setup() {
 }
 
 function draw() {
+
+    delta = deltaTime;
     background(0);
    if(!alive){
        spectatorMode();
