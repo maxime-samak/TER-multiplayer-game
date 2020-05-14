@@ -56,8 +56,7 @@ L’implémentation sera en NodeJS/Socket.io côté serveur, et libre côté cli
 ### [Milestone 3](https://github.com/maxime-samak/TER-multiplayer-game/milestone/4)
 #### Objectifs de livraison
 - [x] Premières analyses des effets de la latence sur la jouabilité du jeu
-- [ ] 
-- [ ] 
+- [x] Mise en place du jeu sur Heroku
 - [ ] 
 
 ### [Milestone 4](https://github.com/maxime-samak/TER-multiplayer-game/milestone/5)
