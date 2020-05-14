@@ -8,16 +8,85 @@ const {removeFood, addFood, getFoodList, foodManagement} = require("./food");
 
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server); // , {pingInterval: 200}
+const io = socketio(server);
 
-// Port 3000
 const port = process.env.PORT || 3000;
 const publicDirectoryPath = path.join(__dirname, "..", "js");
 
 app.use(express.static(publicDirectoryPath));
 
-setInterval(heartbeat, 100);
+
 function heartbeat() {
+    playerEatsFoodCheck();
+    io.emit("sendFoodList", getFoodList());
+
+    playerEatsPlayerCheck();
+    io.emit("heartbeat", getPlayers());
+}
+
+io.on("connection", socket => {
+    let connectionStamp = Date.now();
+    let emitStamp = -1;
+    console.log(`Player ${socket.id} joined`);
+
+    socket.on("pongo", () => { // "pong" is a reserved event name
+        let timeStamp = Date.now();
+        socket.emit("data", timeStamp, timeStamp - emitStamp, Date.now() - connectionStamp)
+    });
+
+    // When client connects for the first time
+    socket.on("start", data => {
+        console.log(`ID: ${socket.id}, x: ${data.x}, y: ${data.y}, radius: ${data.radius}`);
+        const player = new Player(socket.id, data.x, data.y, data.radius, data.color);
+        addPlayer(player);
+        socket.emit("setClientId", socket.id);
+        socket.emit("sendFoodList", getFoodList());
+    });
+
+    //On client update, send info to the server and update
+    socket.on("update", data => {
+        const player = getPlayer(socket.id);
+        if (player !== undefined) {
+            player.updatePosition(data.x, data.y);
+        }
+        else { console.log("Couldn't fetch player (undefined)");}
+    });
+
+    socket.on("playerNewTarget", data => {
+        const player = getPlayer(socket.id);
+        if (player !== undefined) {
+            let mag = Math.sqrt(data.x * data.x + data.y * data.y);
+            mag.toFixed(0);
+            let newMag = 10; // this is the velocity we are trying to achieve
+
+            let newX = player.x + (data.x * newMag / mag);
+            newX.toFixed(0);
+            let newY = player.y + (data.y * newMag / mag);
+            newY.toFixed(0);
+
+            player.updatePosition(newX,  newY);
+        }
+        else { console.log("Couldn't fetch player (undefined)");}
+    });
+
+    socket.on("disconnect", () => {
+        console.log(`Player ${socket.id} disconnected`);
+        removePlayer(socket.id);
+        console.log(getPlayers());
+    });
+
+    setInterval(() => {
+        emitStamp = Date.now();
+        socket.emit("ping");
+    },500);
+
+});
+
+server.listen(port, () => {
+    console.log(`Server started on port ${port}`);
+});
+
+function playerEatsPlayerCheck() {
     players = getPlayers();
     for(let i = 0; i < players.length-1 ; i++){
         for(let j = i+1; j < players.length ; j++){
@@ -39,64 +108,24 @@ function heartbeat() {
             }
         }
     }
-    io.emit("heartbeat", getPlayers());
 }
 
-io.on("connection", socket => {
-    let connectionStamp = Date.now();
-    let emitStamp = -1;
-    console.log(`Player ${socket.id} joined`);
+function playerEatsFoodCheck() {
+    players = getPlayers();
+    foods = getFoodList();
+    for(let i = 0; i < players.length; i++){
+        foods.forEach(function(item, index, object) {
+            let distance = (Math.sqrt(Math.pow(players[i].x - item.x,2) + Math.pow(players[i].y - item.y,2)));
 
-    setInterval(() => {
-        emitStamp = Date.now();
-        socket.emit("ping");
-    },500);
+            if (distance < players[i].radius) {
+                let surfaceArea = (Math.PI * (item.radius ** 2)) + (Math.PI  * (players[i].radius ** 2));
+                players[i].updateState(players[i].x, players[i].y, Math.sqrt(surfaceArea / Math.PI), players[i].nextX, players[i].nextY);
 
-    socket.on("pongo", () => { // "pong" is a reserved event name
-        let timeStamp = Date.now();
-        socket.emit("data", timeStamp, timeStamp - emitStamp, Date.now() - connectionStamp)
-    });
+                removeFood(index);
+                addFood();
+            }
+        })
+    }
+}
 
-    // When client connects for the first time
-    socket.on("start", data => {
-        console.log(`ID: ${socket.id}, x: ${data.x}, y: ${data.y}, radius: ${data.radius}`);
-        const player = new Player(socket.id, data.x, data.y, data.radius, data.color);
-        addPlayer(player);
-        socket.emit("setClientId", socket.id);
-        socket.emit("sendFoodList", getFoodList());
-    });
-
-    //On client update, send info to the server and update
-    socket.on("update", data => {
-        const player = getPlayer(socket.id);
-        if (player !== undefined) {
-            player.updateState(data.x, data.y, data.radius, data.nextX, data.nextY);
-        }
-        else {
-            console.log("Couldn't fetch player (undefined)");
-        }
-        //console.log(`ID: ${socket.id}, x: ${data.x}, y: ${data.y}, radius: ${data.radius}`);
-    });
-
-    // When a client eats a food point
-    socket.on("clientEatsFood", (foodId, foodRadius) => {
-        if (removeFood(foodId) !== -1) {
-            addFood();
-            socket.emit("grow", foodRadius);
-        }
-    });
-
-    setInterval(() => io.emit("sendFoodList", getFoodList()), 200);
-
-    socket.on("disconnect", () => {
-        console.log(`Player ${socket.id} disconnected`);
-        removePlayer(socket.id);
-        console.log(getPlayers());
-    });
-});
-
-server.listen(port, () => {
-    console.log(`Server started on port ${port}`);
-});
-
-
+setInterval(heartbeat, 100);

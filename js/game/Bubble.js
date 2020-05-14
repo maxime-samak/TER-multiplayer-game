@@ -17,11 +17,6 @@ function Bubble(x, y, radius, r = random(255), g = random(255), b = random(255))
     this.nextX = this.position.x;
     this.nextY = this.position.y;
 
-    this.eats = function(food) {
-        let distance = p5.Vector.dist(this.position, food.position);
-        return distance < this.radius;
-    };
-
     this.grow = function(foodRadius) {
         let surfaceArea = (PI * (this.radius ** 2)) + (PI * (foodRadius ** 2));
         this.radius = sqrt(surfaceArea / PI);
@@ -29,23 +24,12 @@ function Bubble(x, y, radius, r = random(255), g = random(255), b = random(255))
 
     this.update = function(boundaries) {
         let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
-        newPosition.setMag(4 * (delta / 10));
-        this.position.add(newPosition);
+        let data = {
+            x: newPosition.x.toFixed(0),
+            y: newPosition.y.toFixed(0)
+        };
 
-        let nextPosition = createVector(mouseX - width / 2, mouseY - height / 2);
-        this.nextX = nextPosition.x;
-        this.nextY = nextPosition.y;
-
-
-        if(this.position.x+this.radius>boundaries.width)
-            this.position.x=boundaries.width-this.radius;
-        else if (this.position.x-this.radius<-boundaries.width)
-            this.position.x=-boundaries.width+this.radius;
-        if(this.position.y+this.radius>boundaries.height)
-            this.position.y=boundaries.height-this.radius;
-        else if (this.position.y-this.radius<-boundaries.height)
-            this.position.y=-boundaries.height+this.radius;
-
+        send("playerNewTarget", data);
     };
 
     this.show = function() {

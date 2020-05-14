@@ -11,6 +11,11 @@ class Player {
         this.previousY = y;
     }
 
+    updatePosition(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
     updateState(x, y, radius, nextX, nextY) {
         this.previousX = this.x;
         this.previousY = this.y;
