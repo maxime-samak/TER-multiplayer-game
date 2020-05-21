@@ -1,12 +1,11 @@
 function prediction(players) {
     for(let i = 0; i < players.length; i++) {
-        if (players[i].id == bubble.id) { continue; }
+        if (players[i].id != bubble.id || !alive) { continue; }
 
         let currentPosition = createVector(players[i].x, players[i].y);
         let nextPosition = createVector(players[i].nextX, players[i].nextY);
         nextPosition.setMag(4 * (delta / 10));
         currentPosition.add(nextPosition);
-
 
         players[i].x = currentPosition.x;
         players[i].y = currentPosition.y;
