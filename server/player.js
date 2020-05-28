@@ -5,25 +5,16 @@ class Player {
         this.y = y;
         this.radius = radius;
         this.color = color;
-        this.nextX = x;
-        this.nextY = y;
         this.previousX = x;
         this.previousY = y;
     }
 
-    updatePosition(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    updateState(x, y, radius, nextX, nextY) {
+    updatePosition(x, y, radius) {
         this.previousX = this.x;
         this.previousY = this.y;
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.nextX = nextX;
-        this.nextY = nextY;
     }
 }
 

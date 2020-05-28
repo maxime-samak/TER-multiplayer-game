@@ -79,15 +79,15 @@ function playerEatsPlayerCheck() {
             let distance = (Math.sqrt(Math.pow(players[j].x-players[i].x,2)+Math.pow(players[j].y-players[i].y,2)));
             let surfaceArea = (Math.PI * (players[i].radius ** 2)) + (Math.PI  * (players[j].radius ** 2));
             if (distance < players[i].radius && players[i].radius > players[j].radius && players[j].radius > 64) {
-                players[i].updateState(players[i].x, players[i].y, Math.sqrt(surfaceArea / Math.PI), players[i].nextX, players[i].nextY);
-                players[j].updateState(-3000,3000,64, -3000, 3000);
+                players[i].updatePosition(players[i].x, players[i].y, Math.sqrt(surfaceArea / Math.PI));
+                players[j].updatePosition(-3000,3000,64);
                 io.emit("death", players[j]);
                 removePlayer(players[j].id);
                 io.emit("kill", players[i]);
             }
             else if(distance < players[j].radius && players[i].radius < players[j].radius && players[i].radius > 64) {
-                players[j].updateState(players[j].x, players[j].y, Math.sqrt(surfaceArea / Math.PI), players[i].nextX, players[i].nextY);
-                players[i].updateState(-3000,3000,64, -3000, 3000);
+                players[j].updatePosition(players[j].x, players[j].y, Math.sqrt(surfaceArea / Math.PI));
+                players[i].updatePosition(-3000,3000,64);
                 io.emit("death", players[i]);
                 removePlayer(players[i].id);
                 io.emit("kill", players[j]);
@@ -105,7 +105,7 @@ function playerEatsFoodCheck() {
 
             if (distance < players[i].radius) {
                 let surfaceArea = (Math.PI * (item.radius ** 2)) + (Math.PI  * (players[i].radius ** 2));
-                players[i].updateState(players[i].x, players[i].y, Math.sqrt(surfaceArea / Math.PI), players[i].nextX, players[i].nextY);
+                players[i].updatePosition(players[i].x, players[i].y, Math.sqrt(surfaceArea / Math.PI));
 
                 removeFood(index);
                 addFood();
@@ -132,7 +132,7 @@ function move(player, data, deltaTime) {
         if (newX + radius >= 3000) { newX = 3000 - radius; }
         else if (newX - radius <= -3000) { newX = -3000 + radius; }
 
-        player.updatePosition(newX,  newY);
+        player.updatePosition(newX,  newY, radius);
     }
     else { console.log("Couldn't fetch player (undefined)");}
 }
