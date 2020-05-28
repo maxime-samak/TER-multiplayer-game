@@ -9,13 +9,21 @@ function closeNav() {
 }
 
 function checkSettings(obj) {
-    if(document.getElementById(obj.id).checked == true) {
-        document.getElementById('prediction').checked = false;
-        document.getElementById('interpolation').checked = false;
-        document.getElementById('default').checked = false;
-
-        //document.getElementById('reconciliation').checked = false;
-        document.getElementById(obj.id).checked = true;
+    switch(obj.id) {
+        case 'prediction':
+            document.getElementById('self-default').checked = !obj.checked;
+            break;
+        case 'interpolation':
+            document.getElementById('default').checked = !obj.checked;
+            break;
+        case 'default':
+            document.getElementById('interpolation').checked = !obj.checked;
+            break;
+        case 'self-default':
+            document.getElementById('prediction').checked = !obj.checked;
+            break;
+        default:
+        //
     }
 }
 

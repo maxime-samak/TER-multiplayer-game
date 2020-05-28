@@ -87,13 +87,10 @@ function draw() {
 
     }
 
-    if (document.getElementById('prediction').checked) {
-        prediction(players);
-    }
-    else if (document.getElementById('interpolation').checked) {
-        interpolation(players)
-    }
-    else { defaultDraw(players) }
+    if (document.getElementById('prediction').checked) {prediction(players);}
+    if (document.getElementById('interpolation').checked) {interpolation(players);}
+    if (document.getElementById('default').checked) {defaultDraw(players);}
+    if (document.getElementById('self-default').checked) {selfDefaultDraw(players);}
 
     foodDraw();
     drawBoundaries();

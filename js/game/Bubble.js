@@ -32,12 +32,6 @@ function Bubble(x, y, radius, r = random(255), g = random(255), b = random(255))
         send("playerNewTarget", data);
     };
 
-    this.predict = function () {
-        let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
-        newPosition.setMag(4 * (delta / 10));
-        this.position.add(newPosition);
-    };
-
     this.show = function() {
         fill(this.r, this.g, this.b);
         ellipse(this.position.x, this.position.y, this.radius * 2)
