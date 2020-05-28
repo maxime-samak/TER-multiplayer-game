@@ -2,17 +2,9 @@ function prediction(players) {
     for(let i = 0; i < players.length; i++) {
         if (players[i].id != bubble.id || !alive) { continue; }
 
-        let currentPosition = createVector(players[i].x, players[i].y);
-        let nextPosition = createVector(players[i].nextX, players[i].nextY);
-        nextPosition.setMag(4 * (delta / 10));
-        currentPosition.add(nextPosition);
-
-        players[i].x = currentPosition.x;
-        players[i].y = currentPosition.y;
-        
-        fill(players[i].color.r, players[i].color.g, players[i].color.b);
-        ellipse(players[i].x, players[i].y, players[i].radius * 2);
-
+        else {
+            bubble.predict() // provisoire
+        }
     }
 }
 

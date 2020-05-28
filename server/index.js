@@ -15,7 +15,6 @@ const publicDirectoryPath = path.join(__dirname, "..", "js");
 
 app.use(express.static(publicDirectoryPath));
 
-
 function heartbeat() {
     playerEatsFoodCheck();
     io.emit("sendFoodList", getFoodList());
@@ -27,6 +26,8 @@ function heartbeat() {
 io.on("connection", socket => {
     let connectionStamp = Date.now();
     let emitStamp = -1;
+    let time = Date.now();
+
     console.log(`Player ${socket.id} joined`);
 
     socket.on("pongo", () => { // "pong" is a reserved event name
@@ -34,7 +35,7 @@ io.on("connection", socket => {
         socket.emit("data", timeStamp, timeStamp - emitStamp, Date.now() - connectionStamp)
     });
 
-    // When client connects for the first time
+    /* When client connects for the first time */
     socket.on("start", data => {
         console.log(`ID: ${socket.id}, x: ${data.x}, y: ${data.y}, radius: ${data.radius}`);
         const player = new Player(socket.id, data.x, data.y, data.radius, data.color);
@@ -43,30 +44,15 @@ io.on("connection", socket => {
         socket.emit("sendFoodList", getFoodList());
     });
 
-    //On client update, send info to the server and update
-    socket.on("update", data => {
-        const player = getPlayer(socket.id);
-        if (player !== undefined) {
-            player.updatePosition(data.x, data.y);
-        }
-        else { console.log("Couldn't fetch player (undefined)");}
-    });
-
+    /* On player update move the player according to the desired direction (data) */
     socket.on("playerNewTarget", data => {
+        let currentTime = Date.now();
+        let deltaTime = currentTime - time;
+        time = currentTime;
+
         const player = getPlayer(socket.id);
-        if (player !== undefined) {
-            let mag = Math.sqrt(data.x * data.x + data.y * data.y);
-            mag.toFixed(0);
-            let newMag = 10; // this is the velocity we are trying to achieve
 
-            let newX = player.x + (data.x * newMag / mag);
-            newX.toFixed(0);
-            let newY = player.y + (data.y * newMag / mag);
-            newY.toFixed(0);
-
-            player.updatePosition(newX,  newY);
-        }
-        else { console.log("Couldn't fetch player (undefined)");}
+        move(player, data, deltaTime);
     });
 
     socket.on("disconnect", () => {
@@ -126,6 +112,29 @@ function playerEatsFoodCheck() {
             }
         })
     }
+}
+
+function move(player, data, deltaTime) {
+    if (player !== undefined) {
+        let mag = Math.sqrt(data.x * data.x + data.y * data.y);
+        mag.toFixed(0);
+        let newMag = 10; // this is the velocity we are trying to achieve
+
+        let newX = player.x + (data.x * newMag / mag) * (deltaTime / 50);
+        newX.toFixed(0);
+        let newY = player.y + (data.y * newMag / mag) * (deltaTime / 50);
+        newY.toFixed(0);
+
+        let radius = player.radius;
+        if (newY + radius >= 3000) { newY = 3000 - radius; }
+        else if (newY - radius <= -3000) { newY = -3000 + radius; }
+
+        if (newX + radius >= 3000) { newX = 3000 - radius; }
+        else if (newX - radius <= -3000) { newX = -3000 + radius; }
+
+        player.updatePosition(newX,  newY);
+    }
+    else { console.log("Couldn't fetch player (undefined)");}
 }
 
 setInterval(heartbeat, 100);
