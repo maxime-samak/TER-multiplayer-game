@@ -8,7 +8,10 @@ function prediction(players) {
             newPosition.setMag(4);
             newPosition.x = newPosition.x * (delta / 50);
             newPosition.y = newPosition.y * (delta / 50);
-            bubble.position.add(newPosition);
+
+            players[i].x += newPosition.x;
+            players[i].y += newPosition.y;
+
             bubble.position = createVector(players[i].x, players[i].y);
             bubble.radius = players[i].radius;
         }
