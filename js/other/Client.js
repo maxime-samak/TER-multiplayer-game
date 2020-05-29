@@ -10,6 +10,12 @@ function send(msg, data) {
     }, delay);
 }
 
+function nbUpdateChanged() {
+    setTimeout(() => {
+        socket.emit("changeNbUpdates",document.getElementById("nbUpdate").value);
+    }, delay);
+}
+
 socket.on("ping", function(ms) {
     socket.emit("pongo");
 
@@ -64,6 +70,11 @@ socket.on("death", data => {
             currentScale = 0.08;
         }
     }, delay);
+});
+
+socket.on("changedNbUpdates", data => {
+    document.getElementById("nbUpdate").value=data;
+    document.getElementById("textInput").innerHTML=data;
 });
 
 socket.on("heartbeat", data => {

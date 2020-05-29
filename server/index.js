@@ -15,6 +15,8 @@ const publicDirectoryPath = path.join(__dirname, "..", "js");
 
 app.use(express.static(publicDirectoryPath));
 
+let nbUpdates = 10;
+
 function heartbeat() {
     playerEatsFoodCheck();
     io.emit("sendFoodList", getFoodList());
@@ -27,6 +29,7 @@ io.on("connection", socket => {
     let connectionStamp = Date.now();
     let emitStamp = -1;
     let time = Date.now();
+    socket.emit("changedNbUpdates",nbUpdates);
 
     console.log(`Player ${socket.id} joined`);
 
@@ -53,6 +56,13 @@ io.on("connection", socket => {
         const player = getPlayer(socket.id);
 
         move(player, data, deltaTime);
+    });
+
+    socket.on("changeNbUpdates", data => {
+        nbUpdates= data;
+        clearInterval(interval);
+        interval = setInterval(heartbeat, 1000/nbUpdates);
+        io.emit("changedNbUpdates",nbUpdates);
     });
 
     socket.on("disconnect", () => {
@@ -137,4 +147,4 @@ function move(player, data, deltaTime) {
     else { console.log("Couldn't fetch player (undefined)");}
 }
 
-setInterval(heartbeat, 100);
+var interval = setInterval(heartbeat, 1000/nbUpdates);

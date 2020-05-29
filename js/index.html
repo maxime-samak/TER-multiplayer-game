@@ -96,6 +96,13 @@
                                 </li>
                                 <li class="cr number">
                                     <div>
+                                        <span class="property-name">Server updates per seconds</span>
+                                        <div class="c" data-children-count="1"><input id="nbUpdate" type="range" value="10" step="1" min="2" max="15" onchange="nbUpdateChanged()" oninput="textInput.innerHTML = nbUpdate.value">
+                                            <p id="textInput">10</p>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div>
                                         <div id="chart" class="c" style="height: 150px; width:100%; background-color: #f1f1f1">
                                             <canvas id="myChart" height="150px"></canvas>
                                         </div>
