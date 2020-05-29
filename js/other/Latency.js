@@ -6,8 +6,8 @@ function prediction(players) {
         else {
             let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
             newPosition.setMag(4);
-            newPosition.x = newPosition.x * (delta / 50);
-            newPosition.y = newPosition.y * (delta / 50);
+            newPosition.x = newPosition.x * (delta / 25);
+            newPosition.y = newPosition.y * (delta / 25);
 
             players[i].x += newPosition.x;
             players[i].y += newPosition.y;
@@ -16,6 +16,10 @@ function prediction(players) {
             bubble.radius = players[i].radius;
         }
     }
+}
+
+function reconciliation(players) {
+
 }
 
 function interpolation(players) {
