@@ -56,7 +56,48 @@ A 30 fps on a donc un delta d'environ 33.3ms, et à 60 fps on obtient environ 16
 Si cet exemple porte uniquement sur les frames rate il ne faut pas oublier que le même principe devrait être appliqué pour toutes valeurs subissant un changement au cours du temps de manière a assurer une cohérence du jeu pour ses joueurs.
 
 ### Modulité
-Dans notre jeu se situe a droite un menu, celui si permets de moduler les variables du client afin de pouvoir tester nos algorithmes à la volée. Ainsi il nous sera possible de simuler, dans le client, des paramètres comme la variation de latence.
+Dans notre jeu se situe a droite un menu, celui si permets de moduler les variables du client afin de pouvoir tester nos algorithmes à la volée. Ainsi il nous sera possible de simuler, dans le client, des paramètres comme la variation de latence, le type d'algortihme ou bien encore le nombre d'update qu'effectuera le serveur par seconde.
+
+### Le Serveur
+Le serveur est responsable de la quasi-totalité des fonctionnalités du jeu. Pour commencer, il utilise socket.io pour recevoir de nouveaux clients, leur créer un joueur et plus tard communiquer avec eux. Lorsqu'un joueur est créé le client envoi, sa position, son radius et sa couleur, en échange le serveur ajoute ces informations dans la liste des joueurs et réponds avec l'id du client et la liste de Food.
+À chaque update le serveur doit envoyer à tous les joueurs la liste des joueurs mise à jour avec les nouvelles positions et la liste de Food. Il est aussi responsable de vérifier les collisions entre joueurs et avec les Food , ainsi, il doit vérifier a chaque update si un joueur est en collision avec une Food, supprimer les Food mangées de la liste et en créer de nouvelles. Il doit aussi vérifier si deux joueurs sont en collision, le plus petit est absorbé et notifié de sa mort part la socket, le plus gros et notifié de son gain de taille.
+Il est aussi responsable du déplacement des joueurs, lorsqu'un client envoie son vecteur de mouvement ( la position de la souris), le serveur va alors calculer sa position et va mettre à jour ses infos.
+
+#### La boucle d'update (HeartBeat)
+La boucle principale du serveur est responsable des updates, c'est elle qui lance les fonctions de vérification des collisions et qui distribue les informations aux joueurs. Par défaut, cette boucle effectue 10 updates par seconde. Ce nombre d'update est paramétrable dans le menu du jeu et est uniformisé entre tout les joueurs. Un nombre faible d'updates est synonymes de peu d'information pour les clients, il est donc naturel de voir les autres joueurs saccader ou les Food être supprimées un instant après être passé dessus. Au contraire, un nombre élevé permet aux clients d'être plus précis et plus fluide, mais le nombre trop important de calculs et de requête ralentis le serveur créant ainsi des décalages entre client et serveur.
+
+### Hébergement sur Heroku
+
+## Algorithmes
+
+### Prédiction client
+Comme nous l'avons dis, c'est le serveur qui calcule la position des joueurs, le client va envoyer son vecteur de mouvement lors de sa boucle, ce message va arriver au serveur après un décalage équivalent au temps de latence, le serveur calcule puis renvoie la position au client dans sa prochaine boucle d'update, le message arrive après un nouveau décalage. Il est donc équivalent qu'en utilisant cette méthode pour calculer la position un long décalage et le joueur va bouger bien après avoir bougé la souris.
+C'est ici qu'entre en fonction l'algorithme de prédiction client:
+Le client va calculer lui-même sa position avec son vecteur de mouvement, tout en continuant à envoyer ce vecteur au serveur. Le client met à jour sa position seul ce qui évite les décalages et les "sauts" dûs à la latence.
+De son côté, le serveur calcule la position de ce même joueurs, en prenant en compte le moment de l'envoi, ainsi lorsque le serveur notifie le joueur de sa nouvelle position, celui-ci devrait déjà s'y trouver, si non, sa position est corrigé côté client, ce qui évite les différence de position entre client et serveur.
+
+Prédiciton client :
+```javascript
+for(let i = 0; i < players.length; i++) {
+        if (players[i].id !== bubble.id || !alive) { continue; }
+
+
+        else {
+            let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
+            newPosition.setMag(4);
+            newPosition.x = newPosition.x * (delta / 25);
+            newPosition.y = newPosition.y * (delta / 25);
+
+            players[i].x += newPosition.x;
+            players[i].y += newPosition.y;
+
+            bubble.position = createVector(players[i].x, players[i].y);
+            bubble.radius = players[i].radius;
+        }
+    }
+```
+
+###
 
 
 ## Notes et références
