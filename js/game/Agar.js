@@ -24,7 +24,11 @@ function foodDraw() {
 /* Manage de translation of the canvas according to the player's current size */
 function canvasTranslation() {
     translate(width / 2 , height / 2);
-    let newScale = 64 / bubble.radius;
+    let newScale=1;
+    if(bubble.radius<350)
+        newScale = 64 / bubble.radius;
+    else
+        newScale = 0.18;
     currentScale = lerp(currentScale, newScale, 0.1);
     scale(currentScale);
     translate(- bubble.position.x, - bubble.position.y);
@@ -59,7 +63,17 @@ function setup() {
     corners.bottomLeft = createVector(-boundaries.width, -boundaries.height);
     corners.bottomRight= createVector(boundaries.width, -boundaries.height);
 
-    bubble = new Bubble(-3000, -3000, 64);
+    let rand = Math.floor(Math.random()*4);
+    if(rand==0)
+        bubble = new Bubble(corners.topLeft.x, corners.topLeft.y, 64);
+    else if(rand==1)
+        bubble = new Bubble(corners.topRight.x, corners.topRight.y, 64);
+    else if(rand==2)
+        bubble = new Bubble(corners.bottomLeft.x, corners.bottomLeft.y, 64);
+    else
+        bubble = new Bubble(corners.bottomRight.x, corners.bottomRight.y, 64);
+
+
 
     const data = {
         x: bubble.position.x,
