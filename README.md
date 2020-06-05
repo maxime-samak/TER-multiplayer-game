@@ -62,7 +62,7 @@ L’implémentation sera en NodeJS/Socket.io côté serveur, et libre côté cli
 ### [Milestone 4](https://github.com/maxime-samak/TER-multiplayer-game/milestone/5)
 #### Objectifs de livraison
 - [x] Changement d'architecture pour le projet
-- [ ] Mis à jour de l'algorithme de prédiction
+- [x] Mis à jour de l'algorithme de prédiction
 - [ ] Ajout d'un algorithme de réconciliation
 - [ ] 
 
