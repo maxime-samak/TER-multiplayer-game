@@ -109,7 +109,9 @@ function draw() {
         bubble.show();
     }
 
+    findSelf(players);
     if (document.getElementById('prediction').checked) {prediction(players);}
+    //reconciliation();
     if (document.getElementById('interpolation').checked) {interpolation(players);}
     if (document.getElementById('default').checked) {defaultDraw(players);}
     if (document.getElementById('self-default').checked) {selfDefaultDraw(players);}

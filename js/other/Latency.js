@@ -1,24 +1,34 @@
-function prediction(players) {
-    for(let i = 0; i < players.length; i++) {
-        if (players[i].id !== bubble.id || !alive) { continue; }
+var reconciliating = false;
+var self;
 
-
-        else {
-            let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
-            newPosition.setMag(4);
-            newPosition.x = newPosition.x * (delta / 25);
-            newPosition.y = newPosition.y * (delta / 25);
-
-            players[i].x += newPosition.x;
-            players[i].y += newPosition.y;
-
-            bubble.position = createVector(players[i].x, players[i].y);
-            bubble.radius = players[i].radius;
+function findSelf(players) {
+    for (let i = 0; i < players.length; i++) {
+        if (players[i].id === bubble.id) {
+            self = players[i];
         }
     }
 }
 
-function reconciliation(players) {
+function prediction() {
+    if (alive) {
+        let sp = 25;
+
+        let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
+        newPosition.setMag(4);
+        newPosition.x = newPosition.x * (delta / sp);
+        newPosition.y = newPosition.y * (delta / sp);
+
+        self.x += newPosition.x;
+        self.y += newPosition.y;
+
+        bubble.position = createVector(self.x, self.y);
+        bubble.radius = self.radius;
+    }
+}
+
+function reconciliation() {
+    reconciliating = true;
+
 
 }
 
@@ -26,8 +36,7 @@ function interpolation(players) {
     for (let i = 0; i < players.length; i++) {
         if (players[i].id === bubble.id) { continue; }
         else {
-
-            let amount = 0.1 * (delta / 50);
+            let amount = 1 / (60 / document.getElementById("nbUpdate").value);
 
             let lastPosition = createVector(players[i].previousX, players[i].previousY);
             let newPosition = createVector(players[i].x, players[i].y);
@@ -43,13 +52,12 @@ function interpolation(players) {
     }
 }
 
-function selfDefaultDraw(players) {
-    for (let i = 0; i < players.length; i++) {
-        if (players[i].id === bubble.id && alive) {
-            bubble.position = createVector(players[i].x, players[i].y);
-            bubble.radius = players[i].radius;
-        }
+function selfDefaultDraw() {
+    if (alive) {
+        bubble.position = createVector(self.x, self.y);
+        bubble.radius = self.radius;
     }
+
 }
 
 function defaultDraw(players) {

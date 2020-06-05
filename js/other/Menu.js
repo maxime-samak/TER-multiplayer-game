@@ -27,6 +27,10 @@ function checkSettings(obj) {
     }
 }
 
+function nbUpdateChanged() {
+    send("changeNbUpdates", document.getElementById("nbUpdate").value);
+}
+
 function charts() {
     let ctx = document.getElementById('myChart').getContext('2d');
     let chart = new Chart(ctx, {
