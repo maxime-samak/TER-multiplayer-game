@@ -45,6 +45,7 @@ function drawBoundaries() {
     strokeWeight(1)
 }
 
+/* Activate spectator mode on death */
 function spectatorMode() {
     translate(width / 2 , height / 2);
     scale(currentScale);
@@ -53,6 +54,7 @@ function spectatorMode() {
     text("Spectator Mode", -1500, 3500);
 }
 
+/* Setup for p5 drawings */
 function setup() {
     let canvas = createCanvas(windowWidth * 0.6, windowHeight * 0.8);
     canvas.parent('game');
@@ -63,17 +65,23 @@ function setup() {
     corners.bottomLeft = createVector(-boundaries.width, -boundaries.height);
     corners.bottomRight= createVector(boundaries.width, -boundaries.height);
 
-    let rand = Math.floor(Math.random()*4);
-    if(rand==0)
-        bubble = new Bubble(corners.topLeft.x, corners.topLeft.y, 64);
-    else if(rand==1)
-        bubble = new Bubble(corners.topRight.x, corners.topRight.y, 64);
-    else if(rand==2)
-        bubble = new Bubble(corners.bottomLeft.x, corners.bottomLeft.y, 64);
-    else
-        bubble = new Bubble(corners.bottomRight.x, corners.bottomRight.y, 64);
-
-
+    let r = Math.floor(Math.random() * 4);
+    switch (r) {
+        case 0:
+            bubble = new Bubble(corners.topLeft.x, corners.topLeft.y, 64);
+            break;
+        case 1:
+            bubble = new Bubble(corners.topRight.x, corners.topRight.y, 64);
+            break;
+        case 2:
+            bubble = new Bubble(corners.bottomLeft.x, corners.bottomLeft.y, 64);
+            break;
+        case 3:
+            bubble = new Bubble(corners.bottomRight.x, corners.bottomRight.y, 64);
+            break;
+        default:
+            break;
+    }
 
     const data = {
         x: bubble.position.x,
@@ -89,6 +97,7 @@ function setup() {
     send("start", data);
 }
 
+/* Draw on each frame (gameloop) */
 function draw() {
     delta = deltaTime;
     background(0);
@@ -98,7 +107,6 @@ function draw() {
     if(alive) {
         canvasTranslation();
         bubble.show();
-
     }
 
     if (document.getElementById('prediction').checked) {prediction(players);}
@@ -111,10 +119,12 @@ function draw() {
 
 }
 
+/* When the user resize its browser window, rescales the canvas to match the new size */
 function windowResized() {
     resizeCanvas(windowWidth * 0.6, windowHeight * 0.8);
 }
 
+/* Send data to the server x times per second */
 setInterval(() => {
     if(alive) {
         bubble.update(boundaries);

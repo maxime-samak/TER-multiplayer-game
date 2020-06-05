@@ -14,15 +14,13 @@ function Bubble(x, y, radius, r = random(255), g = random(255), b = random(255))
     this.r = r;
     this.g = g;
     this.b = b;
-    this.nextX = this.position.x;
-    this.nextY = this.position.y;
 
     this.grow = function(foodRadius) {
         let surfaceArea = (PI * (this.radius ** 2)) + (PI * (foodRadius ** 2));
         this.radius = sqrt(surfaceArea / PI);
     };
 
-    this.update = function(boundaries) {
+    this.update = function() {
         let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
         let data = {
             x: newPosition.x.toFixed(0),
