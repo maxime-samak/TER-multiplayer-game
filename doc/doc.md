@@ -56,7 +56,10 @@ A 30 fps on a donc un delta d'environ 33.3ms, et à 60 fps on obtient environ 16
 Si cet exemple porte uniquement sur les frames rate il ne faut pas oublier que le même principe devrait être appliqué pour toutes valeurs subissant un changement au cours du temps de manière a assurer une cohérence du jeu pour ses joueurs.
 
 ### Modulité
-Dans notre jeu se situe a droite un menu, celui si permets de moduler les variables du client afin de pouvoir tester nos algorithmes à la volée. Ainsi il nous sera possible de simuler, dans le client, des paramètres comme la variation de latence, le type d'algortihme ou bien encore le nombre d'update qu'effectuera le serveur par seconde.
+Dans notre jeu se situe a droite un menu, celui si permets de moduler les variables du client afin de pouvoir tester nos algorithmes à la volée. Ainsi il nous sera possible de simuler, dans le client, des paramètres comme la variation de latence, le type d'algortihme ou bien encore le nombre d'update qu'effectuera le serveur par seconde. 
+
+### Le client
+Le client se connecte au serveur par socket.io, il reçoit les informations nécessaires au lancement de sa partie. Par la suite, il reçoit à chaque update serveur, la liste des joueurs et leurs positions, la liste des Food, il met alors à jour ces informations. La boucle client est effectuée une fois par seconde, sa seule utilité est de calculer le vecteur de mouvement et de le transmettre au serveur pour le calcul des positions. Le calcul de ce vecteur à partir du positionnement de la souris est la seule responsabilité du client.
 
 ### Le Serveur
 Le serveur est responsable de la quasi-totalité des fonctionnalités du jeu. Pour commencer, il utilise socket.io pour recevoir de nouveaux clients, leur créer un joueur et plus tard communiquer avec eux. Lorsqu'un joueur est créé le client envoi, sa position, son radius et sa couleur, en échange le serveur ajoute ces informations dans la liste des joueurs et réponds avec l'id du client et la liste de Food.
@@ -67,6 +70,13 @@ Il est aussi responsable du déplacement des joueurs, lorsqu'un client envoie so
 La boucle principale du serveur est responsable des updates, c'est elle qui lance les fonctions de vérification des collisions et qui distribue les informations aux joueurs. Par défaut, cette boucle effectue 10 updates par seconde. Ce nombre d'update est paramétrable dans le menu du jeu et est uniformisé entre tout les joueurs. Un nombre faible d'updates est synonymes de peu d'information pour les clients, il est donc naturel de voir les autres joueurs saccader ou les Food être supprimées un instant après être passé dessus. Au contraire, un nombre élevé permet aux clients d'être plus précis et plus fluide, mais le nombre trop important de calculs et de requête ralentis le serveur créant ainsi des décalages entre client et serveur.
 
 ### Hébergement sur Heroku
+
+#### Première version
+Lors de notre premier déploiement du jeu sur Heroku, l'architecture que nous utilisions était différente, le client vaait beaucoup plus de responsabilités. En enffet c'est lui qui calculer le mouvement et l'envoyais, avec le vecteur de mouvement, une fois par seconde au serveur. C'était aussi le client qui calculais les collisions entre joueurs et entre Food, et qui à chaque fois envoyais les informations au serveur. Cette architechure a soulevé un problème, les clients envoyais trop de requete au serveur, le serveur cloud Heroku était alors très rapidement surchargé et avec seulement deux joueurs nous nous retrouvions avec des décalages entre serveur et clients allant jusqu'a 10 secondes ou plus. Nous avons donc repenser notre couple serveur-client pour le passer sur l'architechure que nous avons maintenant, où le serveur est le principal responsable des fonctionnalités.
+
+#### Seconde version
+Grâce au changement pour l'architechure, présentée précédemment, le nombre de reqêtes envoyées au serveur a largement baissé, des décalages entre serveur et clients peuvent toujours se créer en particulier avec un nombre d'updates serveur elevé.
+ 
 
 ## Algorithmes
 
@@ -93,6 +103,29 @@ for(let i = 0; i < players.length; i++) {
 
             bubble.position = createVector(players[i].x, players[i].y);
             bubble.radius = players[i].radius;
+        }
+    }
+```
+
+### Interpolation
+
+```javascript
+for (let i = 0; i < players.length; i++) {
+        if (players[i].id === bubble.id) { continue; }
+        else {
+
+            let amount = 0.1 * (delta / 50);
+
+            let lastPosition = createVector(players[i].previousX, players[i].previousY);
+            let newPosition = createVector(players[i].x, players[i].y);
+
+            let currentPosition = p5.Vector.lerp(lastPosition, newPosition, amount);
+
+            players[i].previousX = currentPosition.x;
+            players[i].previousY = currentPosition.y;
+
+            fill(players[i].color.r, players[i].color.g, players[i].color.b);
+            ellipse(players[i].previousX, players[i].previousY, players[i].radius * 2);
         }
     }
 ```
