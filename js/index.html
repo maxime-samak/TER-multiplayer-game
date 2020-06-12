@@ -51,21 +51,28 @@
                                 </li>
                                 <li class="cr number">
                                     <div>
-                                        <span class="property-name">client prediction</span>
+                                        <span class="property-name">Prediction (self)</span>
                                         <input type="checkbox" id="prediction" name="" onclick="checkSettings(this)">
                                     </div>
                                 </li>
-                                <!--
                                 <li class="cr number">
                                     <div>
-                                        <span class="property-name">client reconciliation</span>
+                                        <span class="property-name">Reconciliation</span>
                                         <input type="checkbox" id="reconciliation" name="" onclick="checkSettings(this)">
                                     </div>
-                                </li> -->
+                                </li>
                                 <li class="cr number">
                                     <div>
-                                        <span class="property-name">client interpolation</span>
+                                        <span class="property-name">Interpolation (others)</span>
                                         <input type="checkbox" id="interpolation" name="" onclick="checkSettings(this)">
+                                    </div>
+                                </li>
+
+                                <li class="title">Drawing</li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">server POV</span>
+                                        <input type="checkbox" id="pov" name="" onclick="checkSettings(this)" checked>
                                     </div>
                                 </li>
                             </ul>
@@ -96,7 +103,7 @@
                                 </li>
                                 <li class="cr number">
                                     <div>
-                                        <span class="property-name">Server updates per seconds</span>
+                                        <span class="property-name">Server updates (s)</span>
                                         <div class="c" data-children-count="1"><input id="nbUpdate" type="range" value="10" step="1" min="2" max="15" onchange="nbUpdateChanged()" oninput="textInput.innerHTML = nbUpdate.value">
                                             <p id="textInput">10</p>
                                     </div>

@@ -21,6 +21,7 @@ function checkSettings(obj) {
             break;
         case 'self-default':
             document.getElementById('prediction').checked = !obj.checked;
+            document.getElementById('reconciliation').checked = !obj.checked;
             break;
         default:
         //

@@ -32,7 +32,12 @@ function prediction() {
 }
 
 function reconciliation() {
+    let serverPosition = createVector(self.x, self.y);
+    let clientPosition = createVector(bubble.position.x, bubble.position.y);
 
+    let nextPosition = p5.Vector.lerp(serverPosition, clientPosition, 0.1);
+
+    bubble.position = nextPosition;
 }
 
 function interpolation(players) {

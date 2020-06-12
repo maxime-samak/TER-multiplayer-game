@@ -110,17 +110,24 @@ function draw() {
     }
 
     findSelf(players);
-    if (document.getElementById('prediction').checked) {
-        prediction();
-        reconciliation();
-    }
+    if (document.getElementById('prediction').checked) {prediction();}
+    if (document.getElementById('reconciliation').checked) { reconciliation();}
     if (document.getElementById('interpolation').checked) {interpolation(players);}
     if (document.getElementById('default').checked) {defaultDraw(players);}
     if (document.getElementById('self-default').checked) {selfDefaultDraw();}
 
-    /* show where the server see the player*/
-    fill(this.r, this.g, this.b);
-    ellipse(this.self.x, this.self.y, 64);
+    if (document.getElementById('pov').checked) {
+        /* show where the server see the player*/
+        fill('rgb(100%,0%,10%)');
+        ellipse(this.self.x, this.self.y, 64);
+
+        /* show direction */
+        let v0 = createVector(self.x, self.y);
+
+        let v1 = createVector(mouseX - width / 2, mouseY - height / 2);
+        drawArrow(v0, v1, 'blue');
+    }
+
 
     foodDraw();
     drawBoundaries();
@@ -136,3 +143,19 @@ setInterval(() => {
     if(alive) {
         bubble.update(boundaries);
     }}, 100);
+
+// draw an arrow for a vector at a given base position
+function drawArrow(base, vector, color) {
+    vector.setMag(100);
+    push();
+    stroke(color);
+    strokeWeight(3);
+    fill(color);
+    translate(base.x, base.y);
+    line(0, 0, vector.x, vector.y);
+    rotate(vector.heading());
+    let size = 7;
+    translate(vector.mag() - size, 0);
+    triangle(0, size / 2, 0, - size / 2, size, 0);
+    pop();
+}
