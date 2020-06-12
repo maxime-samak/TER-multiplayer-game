@@ -110,15 +110,20 @@ function draw() {
     }
 
     findSelf(players);
-    if (document.getElementById('prediction').checked) {prediction(players);}
-    //reconciliation();
+    if (document.getElementById('prediction').checked) {
+        prediction();
+        reconciliation();
+    }
     if (document.getElementById('interpolation').checked) {interpolation(players);}
     if (document.getElementById('default').checked) {defaultDraw(players);}
-    if (document.getElementById('self-default').checked) {selfDefaultDraw(players);}
+    if (document.getElementById('self-default').checked) {selfDefaultDraw();}
+
+    /* show where the server see the player*/
+    fill(this.r, this.g, this.b);
+    ellipse(this.self.x, this.self.y, 64);
 
     foodDraw();
     drawBoundaries();
-
 }
 
 /* When the user resize its browser window, rescales the canvas to match the new size */

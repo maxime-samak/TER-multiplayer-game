@@ -72,6 +72,7 @@ socket.on("changedNbUpdates", data => {
 });
 
 socket.on("heartbeat", data => {
+    flag = true;
     setTimeout(() => {
         players = data;
     }, delay);

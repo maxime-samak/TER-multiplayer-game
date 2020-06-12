@@ -1,5 +1,5 @@
-var reconciliating = false;
 var self;
+var flag = false;
 
 function findSelf(players) {
     for (let i = 0; i < players.length; i++) {
@@ -11,17 +11,17 @@ function findSelf(players) {
 
 function prediction() {
     if (alive) {
-        let sp = 25;
+        let sp = 20;
 
         let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
         newPosition.setMag(4);
         newPosition.x = newPosition.x * (delta / sp);
         newPosition.y = newPosition.y * (delta / sp);
 
-        self.x += newPosition.x;
-        self.y += newPosition.y;
+        bubble.position.x += newPosition.x;
+        bubble.position.y += newPosition.y;
 
-        bubble.position = createVector(self.x, self.y);
+        //bubble.position = createVector(self.x, self.y);
         bubble.radius = self.radius;
 
         if (bubble.position.x > 3000 - bubble.radius) { bubble.position.x = 3000 - bubble.radius}
@@ -32,8 +32,6 @@ function prediction() {
 }
 
 function reconciliation() {
-    reconciliating = true;
-
 
 }
 
