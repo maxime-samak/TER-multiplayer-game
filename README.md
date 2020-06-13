@@ -76,4 +76,4 @@ Dans la console à la racine du projet :
 Enfin taper localhost:3000 sur un navigateur pour ouvrir un client en local.
 
 ### En ligne
-Le projet est utilisable en ligne [ici](https://ter-jeux-multijoueurs.herokuapp.com/) grâce à [Heroku](https://www.heroku.com/) !
+Le projet est utilisable en ligne [ici](https://ter-jeu-multijoueurs.herokuapp.com/) grâce à [Heroku](https://www.heroku.com/) !
