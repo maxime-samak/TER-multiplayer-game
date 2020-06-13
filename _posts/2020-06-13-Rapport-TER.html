@@ -1,138 +1,124 @@
-<!doctype html>
+---
+title: My First Page
+layout: default
+---
 
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
 
-  <title>Rapport TER: Jeux multijoueurs</title>
-  <meta name="description" content="TER">
-  <meta name="maxime" content="">
+<div>
+    <h2> Introduction </h2>
+    <h3> Présentation du groupe </h3>
+    <p> Encadrant : Michel Buffa </p>
+    <p>
+        <br> SAMAK Maxime </br>
+        <br> MUNIER Rémy </br>
+        <br> VASSEUR Adrien </br>
+        <br> HALLACI Sabri </br>
+    </p>
 
-  <link rel="stylesheet" href="">
+    <h3> Présentation du sujet </h3>
+    <p>
+        Le but de ce TER est de mettre en place des algorithmes de détection et de correction de latence, sur un jeu multijoueur réactif en ligne, puis de tester leurs efficacités et leurs limites. Pour ce faire, nous avons recréé un jeu de type "argar.io" et allons travailler dessus. Nous utiliserons des algorithmes tel que "Prediction" et "Interpolation", nous les testerons avec des latences élevées et/ou variables, ainsi qu'avec une multitude de joueurs pour découvrir leurs limites.
+    </p>
+</div>
 
-</head>
+<div>
+    <h2> Technologies utilisés </h2>
 
-    <body>
-        <h1>TER: Jeux multijoueurs sur le Web</h1>
+    <h3> socket.io </h3>
+    <p> <a href="http://socket.io">socket.io</a> est un outil puissant permettant la communication  en temps réel entre un serveur et un ou plusieurs clients. Sa compatibilité avec des technologies récentes tel que les web sockets, mais aussi avec des basiques du networking comme JSON, ... le rende très flexible.
+    </p>
+    <p> Sa simplicité d'utilisation et notre familiarité avec cette technologie (utilisation lors de différents projets) nous ont poussés à son utilisation pour ce TER.</p>
 
-        <div>
-            <h2> Introduction </h2>
-            <h3> Présentation du groupe </h3>
-            <p> Encadrant : Michel Buffa </p>
-            <p>
-                <br> SAMAK Maxime </br>
-                <br> MUNIER Rémy </br>
-                <br> VASSEUR Adrien </br>
-                <br> HALLACI Sabri </br>
-            </p>
+    <h3> node.js </h3>
+    <p> <a href="https://nodejs.org/fr/">node.js</a> est un outil facile d'accès et polyvalent, il est en effet aisé d'héberger un projet node.js de par son support par la plupart des fournisseurs d'hébergement, de même son déploiement sur un serveur personnel ne présente pas de difficultés. </p>
+    <p>Un grand nombre de modules sont disponibles pour node.js et parmi ces derniers on fera surtout mention d'<a href="http://expressjs.com/">Express</a> couvrant pour nous la totalité des interactions entre notre client et le serveur.
+    </p>
 
-            <h3> Présentation du sujet </h3>
-            <p> 
-                Le but de ce TER est de mettre en place des algorithmes de détection et de correction de latence, sur un jeu multijoueur réactif en ligne, puis de tester leurs efficacités et leurs limites. Pour ce faire, nous avons recréé un jeu de type "argar.io" et allons travailler dessus. Nous utiliserons des algorithmes tel que "Prediction" et "Interpolation", nous les testerons avec des latences élevées et/ou variables, ainsi qu'avec une multitude de joueurs pour découvrir leurs limites.
-            </p>
-        </div>
+    <h3> p5.js </h3>
+    <p> <a href="https://p5js.org/">p5.js</a> est une librairie permettant une certaine facilité dans le développement de contenu créatif, ainsi elle est toute indiquée pour l'élaboration d'un jeu.
+     </p>
 
-        <div>
-            <h2> Technologies utilisés </h2>
+    <h3> Heroku </h3>
+    <p> <a href="https://www.heroku.com/">Heroku</a> est une plateforme d'hébergement orientée cloud, qui nous permet d'héberger notre projet node.js sur un serveur distant, permettant un réel impact sur les vitesses de connections et le multijoueurs de notre projet.
+    </p>
+</div>
 
-            <h3> socket.io </h3>
-            <p> <a href="http://socket.io">socket.io</a> est un outil puissant permettant la communication  en temps réel entre un serveur et un ou plusieurs clients. Sa compatibilité avec des technologies récentes tel que les web sockets, mais aussi avec des basiques du networking comme JSON, ... le rende très flexible. 
-            </p>
-            <p> Sa simplicité d'utilisation et notre familiarité avec cette technologie (utilisation lors de différents projets) nous ont poussés à son utilisation pour ce TER.</p>
+<div>
+    <h2> Jeu multijoueurs en temps réel </h2>
+    <p> Un jeu multijoueur dit "en temps réel" est un jeu ou les joueurs jouent simultanément, ainsi si l'un se déplace, il doit se déplacer "instantanément" aussi sur les écrans des autres joueurs. Ex : FPS, Mario Kart, agar.io ...
+    </p>
 
-            <h3> node.js </h3>
-            <p> <a href="https://nodejs.org/fr/">node.js</a> est un outil facile d'accès et polyvalent, il est en effet aisé d'héberger un projet node.js de par son support par la plupart des fournisseurs d'hébergement, de même son déploiement sur un serveur personnel ne présente pas de difficultés. </p>
-            <p>Un grand nombre de modules sont disponibles pour node.js et parmi ces derniers on fera surtout mention d'<a href="http://expressjs.com/">Express</a> couvrant pour nous la totalité des interactions entre notre client et le serveur.
-            </p>
+    <h3> Networking client-serveur </h3>
+    <p>
+        Le jeu tourne à l'aide de nodes.js utilisant socket.io pour créer une communication websocket avec un ou plusieurs clients se connectant sur le port 3000 (par défaut).
 
-            <h3> p5.js </h3>
-            <p> <a href="https://p5js.org/">p5.js</a> est une librairie permettant une certaine facilité dans le développement de contenu créatif, ainsi elle est toute indiquée pour l'élaboration d'un jeu.
-             </p>
+        <br>
+        <img src="{{site.baseurl}}/assets/images/client_server_com.png" alt="connection">
+        <img src="/assets/images/RTT.png" alt="">
 
-            <h3> Heroku </h3>
-            <p> <a href="https://www.heroku.com/">Heroku</a> est une plateforme d'hébergement orientée cloud, qui nous permet d'héberger notre projet node.js sur un serveur distant, permettant un réel impact sur les vitesses de connections et le multijoueurs de notre projet.
-            </p>
-        </div>
+        <br>
 
-        <div>
-            <h2> Jeu multijoueurs en temps réel </h2>
-            <p> Un jeu multijoueur dit "en temps réel" est un jeu ou les joueurs jouent simultanément, ainsi si l'un se déplace, il doit se déplacer "instantanément" aussi sur les écrans des autres joueurs. Ex : FPS, Mario Kart, agar.io ...
-            </p>
+        On peut séparer la communication d'un client au serveur en trois étapes distinctes:
+        <ol>
+            <li> Le client qui se connecte se voit affecter un identifiant unique, et est ajouté à la liste des joueurs actuellement connectés au serveur. On lui attribue également une position de départ ainsi que des informations pour la représentation de son personnage (taille, couleur, ...). </li>
+            <li> Le client va ensuite communiquer au serveur la direction vers laquelle il souhaite se déplacer (via tracking de la souris). Le serveur reçoit ces informations les traites et procède aux différentes modifications sur l'état du jeu. </li>
+            <li> Périodiquement le serveur va broadcaster la liste des joueurs avec leurs informations mises à jour ainsi que l'état courant du jeu. </li>
+        </ol>
+        Les étapes 2 et 3 sont reproduites 10 fois par seconde (par défaut), le taux de rafraîchissement du serveur est modifiable via un curseur sur l'interface client.
+    </p>
 
-            <h3> Networking client-serveur </h3>
-            <p>
-                Le jeu tourne à l'aide de nodes.js utilisant socket.io pour créer une communication websocket avec un ou plusieurs clients se connectant sur le port 3000 (par défaut).
+    <h4> Client </h4>
+    <p> Le client est la partie du jeu qui s'ouvre dans votre browser, il a la charge de communiquer avec le serveur et de toute la partie graphique du jeu à savoir :
+        <ul>
+            <li> Le rendu visuel du jeu sur un canvas </li>
+            <li> La gestion du menu pour les options </li>
+            <li> Le rendu visuel de la courbe de latence </li>
+        </ul>
+    </p>
+    <p> De plus c'est le client qui à l'aide d'algorithmes de prédiction va permettre à l'utilisateur d'avoir une sensation d'agir sur le jeu instantanément à partir d'une dizaine (voir moins) d'updates du serveur à la seconde. Ainsi on pourra même conserver une impression d'avoir 60 fps avec seulement 3 ou 4 updates dans le pire des cas. </p>
 
-                <br>
-                <img src="{{site.baseurl}}/resources/client_server_com.png" alt="connection">
-                <img src="/assets/images/RTT.png" alt="">
+    <h4> Serveur </h4>
+    <p> C'est sur le serveur que toute la logique du jeu va s'opérer, à partir des directions envoyés par les clients, il va calculer les nouvelles positions des joueurs et changer l'état du jeu en conséquence. </p>
+    <p> A chaque update le serveur procède aux opérations suivantes:
+        <ul>
+            <li>Calcul des nouvelles positions des joueurs à l'aide des vecteurs de position envoyés</li>
+            <li>Recherche de collisions entre joueurs</li>
+            <li>Recherche de collisions entre les joueurs et les éléments du jeu</li>
+            <li>Mise à jour des informations des joueurs</li>
+            <li>Broadcast des nouvelles informations</li>
 
-                <br>
+        </ul>
+    </p>
+    <p> La centralisation de la logique permet à la fois d'éviter toute triche de la part des joueurs, ainsi que de limiter les échanges nécessaires pour faire tourner correctement le jeu (ce choix d'architecture sera détaillé ultérieurement dans le rapport). </p>
 
-                On peut séparer la communication d'un client au serveur en trois étapes distinctes:
-                <ol> 
-                    <li> Le client qui se connecte se voit affecter un identifiant unique, et est ajouté à la liste des joueurs actuellement connectés au serveur. On lui attribue également une position de départ ainsi que des informations pour la représentation de son personnage (taille, couleur, ...). </li>
-                    <li> Le client va ensuite communiquer au serveur la direction vers laquelle il souhaite se déplacer (via tracking de la souris). Le serveur reçoit ces informations les traites et procède aux différentes modifications sur l'état du jeu. </li>
-                    <li> Périodiquement le serveur va broadcaster la liste des joueurs avec leurs informations mises à jour ainsi que l'état courant du jeu. </li>
-                </ol>
-                Les étapes 2 et 3 sont reproduites 10 fois par seconde (par défaut), le taux de rafraîchissement du serveur est modifiable via un curseur sur l'interface client.
-            </p>
 
-            <h4> Client </h4>
-            <p> Le client est la partie du jeu qui s'ouvre dans votre browser, il a la charge de communiquer avec le serveur et de toute la partie graphique du jeu à savoir : 
-                <ul>
-                    <li> Le rendu visuel du jeu sur un canvas </li>
-                    <li> La gestion du menu pour les options </li>
-                    <li> Le rendu visuel de la courbe de latence </li>
-                </ul>
-            </p>
-            <p> De plus c'est le client qui à l'aide d'algorithmes de prédiction va permettre à l'utilisateur d'avoir une sensation d'agir sur le jeu instantanément à partir d'une dizaine (voir moins) d'updates du serveur à la seconde. Ainsi on pourra même conserver une impression d'avoir 60 fps avec seulement 3 ou 4 updates dans le pire des cas. </p>
+    <h3> Hardware et Browser </h3>
+    <p> Toutes les machines ne sont pas équivalentes en termes de puissance et donc de rapidité, il en va de même pour les browsers qui de par leurs spécificités propres n'auront pas toujours la même efficacité pour une tâche donnée. </p>
+    <p> Une étape essentielle du développement d'un jeu web est donc de pallier à ces inégalités qui toucheront les utilisateurs. </p>
 
-            <h4> Serveur </h4>
-            <p> C'est sur le serveur que toute la logique du jeu va s'opérer, à partir des directions envoyés par les clients, il va calculer les nouvelles positions des joueurs et changer l'état du jeu en conséquence. </p>
-            <p> A chaque update le serveur procède aux opérations suivantes: 
-                <ul>
-                    <li>Calcul des nouvelles positions des joueurs à l'aide des vecteurs de position envoyés</li>
-                    <li>Recherche de collisions entre joueurs</li>
-                    <li>Recherche de collisions entre les joueurs et les éléments du jeu</li>
-                    <li>Mise à jour des informations des joueurs</li>
-                    <li>Broadcast des nouvelles informations</li>
+    <h4> Frame rate </h4>
+    <p> Prenons un exemple simple pour illustrer ce phénomène : un block se trouve sur un axe X, il se déplace sur cet axe de +1 pixel par frame. Ainsi le joueur A qui fait tourner son jeu à 30 fps verra se déplacer ce block de 30 pixels sur l'axe X en 1 seconde, seulement le joueur B ayant un ordinateur plus performant et ayant 60 fps verra ce même block se déplacer de 60 pixels en 1 seconde. </p>
 
-                </ul>
-            </p>
-            <p> La centralisation de la logique permet à la fois d'éviter toute triche de la part des joueurs, ainsi que de limiter les échanges nécessaires pour faire tourner correctement le jeu (ce choix d'architecture sera détaillé ultérieurement dans le rapport). </p>
+    <p> Il y a là un véritable problème !</p>
 
-        
-            <h3> Hardware et Browser </h3>
-            <p> Toutes les machines ne sont pas équivalentes en termes de puissance et donc de rapidité, il en va de même pour les browsers qui de par leurs spécificités propres n'auront pas toujours la même efficacité pour une tâche donnée. </p>
-            <p> Une étape essentielle du développement d'un jeu web est donc de pallier à ces inégalités qui toucheront les utilisateurs. </p>
+    <p> Solution : pour s'assurer que notre block se déplace toujours à la même vitesse nous allons introduire un concept de delta de temps entre deux rafraîchissements. Cette valeur, exprimée en millisecondes, représente le temps écoulé entre deux itérations de notre boucle de rendu graphique. </p>
+    <p> À 30 fps on a donc un delta d'environ 33.3 ms, et à 60 fps on obtient environ 16.66 ms pour notre delta, on peut désormais multiplier notre valeur de déplacement (+1 sur l'axe x) par nos delta pour obtenir un mouvement à 1 pixel par seconde pour nos deux joueurs.</p>
 
-            <h4> Frame rate </h4>
-            <p> Prenons un exemple simple pour illustrer ce phénomène : un block se trouve sur un axe X, il se déplace sur cet axe de +1 pixel par frame. Ainsi le joueur A qui fait tourner son jeu à 30 fps verra se déplacer ce block de 30 pixels sur l'axe X en 1 seconde, seulement le joueur B ayant un ordinateur plus performant et ayant 60 fps verra ce même block se déplacer de 60 pixels en 1 seconde. </p>
+    <br>
+    <img src="{{site.baseurl}}/resources/delta.png" alt="Delta">
+    </br>
 
-            <p> Il y a là un véritable problème !</p>
+    <p> Si cet exemple porte uniquement sur les frames rate il ne faut pas oublier que le même principe devrait être appliqué pour toutes valeurs subissant un changement au cours du temps de manière a assurer une cohérence du jeu pour l'ensemble des joueurs. </p>
 
-            <p> Solution : pour s'assurer que notre block se déplace toujours à la même vitesse nous allons introduire un concept de delta de temps entre deux rafraîchissements. Cette valeur, exprimée en millisecondes, représente le temps écoulé entre deux itérations de notre boucle de rendu graphique. </p>
-            <p> À 30 fps on a donc un delta d'environ 33.3 ms, et à 60 fps on obtient environ 16.66 ms pour notre delta, on peut désormais multiplier notre valeur de déplacement (+1 sur l'axe x) par nos delta pour obtenir un mouvement à 1 pixel par seconde pour nos deux joueurs.</p>
+    <h4> Calcul de la latence </h4>
+    <p>
 
-            <br>
-            <img src="{{site.baseurl}}/resources/delta.png" alt="Delta">
-            </br>
+        <br>
+            <img src="{{site.baseurl}}/resources/RTT.png" alt="Round trip time (RTT)">
+        </br>
+    </p>
 
-            <p> Si cet exemple porte uniquement sur les frames rate il ne faut pas oublier que le même principe devrait être appliqué pour toutes valeurs subissant un changement au cours du temps de manière a assurer une cohérence du jeu pour l'ensemble des joueurs. </p>
+    <h3> Autre </h3>
+    <p> On pourra également noter la présence d'un panneau de contrôle permettant d'activer/désactiver les codes de prédiction/interpolation/... à la volée ainsi que de modifier certains attributs du serveur.</p>
 
-            <h4> Calcul de la latence </h4>
-            <p>
-
-                <br>
-                    <img src="{{site.baseurl}}/resources/RTT.png" alt="Round trip time (RTT)">
-                </br>
-            </p>
-
-            <h3> Autre </h3>
-            <p> On pourra également noter la présence d'un panneau de contrôle permettant d'activer/désactiver les codes de prédiction/interpolation/... à la volée ainsi que de modifier certains attributs du serveur.</p>
-
-        </div>
-
-    </body>
-</html>
+</div>
