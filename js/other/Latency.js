@@ -1,6 +1,7 @@
 var self;
 var flag = false;
 
+/* Find client's player values in the data sent by the server */
 function findSelf(players) {
     for (let i = 0; i < players.length; i++) {
         if (players[i].id === bubble.id) {
@@ -9,6 +10,7 @@ function findSelf(players) {
     }
 }
 
+/* Replicate the server movement behavior to draw a visual representation of it on the client (at 60 fps) */
 function prediction() {
     if (alive) {
         let sp = 20;
@@ -31,15 +33,19 @@ function prediction() {
     }
 }
 
+/* Correct the client predicted movements to match the servers*/
 function reconciliation() {
-    let serverPosition = createVector(self.x, self.y);
-    let clientPosition = createVector(bubble.position.x, bubble.position.y);
+    if (alive) {
+        let serverPosition = createVector(self.x, self.y);
+        let clientPosition = createVector(bubble.position.x, bubble.position.y);
 
-    let nextPosition = p5.Vector.lerp(serverPosition, clientPosition, 0.1);
+        let nextPosition = p5.Vector.lerp(clientPosition, serverPosition, 0.1);
 
-    bubble.position = nextPosition;
+        bubble.position = nextPosition;
+    }
 }
 
+/* Draw other players movements at 60 fps but at t-1 */
 function interpolation(players) {
     for (let i = 0; i < players.length; i++) {
         if (players[i].id === bubble.id) { continue; }
@@ -60,14 +66,15 @@ function interpolation(players) {
     }
 }
 
+/* Draw client on server update */
 function selfDefaultDraw() {
     if (alive) {
         bubble.position = createVector(self.x, self.y);
         bubble.radius = self.radius;
     }
-
 }
 
+/* Draw other players on server update */
 function defaultDraw(players) {
     for (let i = 0; i < players.length; i++) {
         if (players[i].id === bubble.id) { continue; }

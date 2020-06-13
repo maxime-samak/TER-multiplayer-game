@@ -102,32 +102,13 @@ function draw() {
     delta = deltaTime;
     background(0);
 
-    if(!alive){ spectatorMode(); }
-
     if(alive) {
         canvasTranslation();
         bubble.show();
     }
+    else { spectatorMode(); }
 
-    findSelf(players);
-    if (document.getElementById('prediction').checked) {prediction();}
-    if (document.getElementById('reconciliation').checked) { reconciliation();}
-    if (document.getElementById('interpolation').checked) {interpolation(players);}
-    if (document.getElementById('default').checked) {defaultDraw(players);}
-    if (document.getElementById('self-default').checked) {selfDefaultDraw();}
-
-    if (document.getElementById('pov').checked) {
-        /* show where the server see the player*/
-        fill('rgb(100%,0%,10%)');
-        ellipse(this.self.x, this.self.y, 64);
-
-        /* show direction */
-        let v0 = createVector(self.x, self.y);
-
-        let v1 = createVector(mouseX - width / 2, mouseY - height / 2);
-        drawArrow(v0, v1, 'blue');
-    }
-
+    applySettings();
 
     foodDraw();
     drawBoundaries();
