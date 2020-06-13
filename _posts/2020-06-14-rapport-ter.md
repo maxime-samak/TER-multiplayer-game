@@ -44,7 +44,7 @@ Un grand nombre de modules sont disponibles pour node.js et parmi ces derniers o
 
 Le jeu tourne à l'aide de nodes.js utilisant socket.io pour créer une communication websocket avec un ou plusieurs clients se connectant sur le port 3000 (par défaut).
 
-![connection](/assets/images/client_server_com.png)
+![connection]({{ "/assets/images/client_server_com.png" | absolute_url }})
 
 On peut séparer la communication d'un client au serveur en trois étapes distinctes:
 
