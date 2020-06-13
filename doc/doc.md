@@ -88,33 +88,37 @@ De son côté, le serveur calcule la position de ce même joueurs, en prenant en
 
 Prédiciton client :
 ```javascript
-for(let i = 0; i < players.length; i++) {
-        if (players[i].id !== bubble.id || !alive) { continue; }
+if (alive) {
+        //speed
+        let sp = 20;
 
+        let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
+        newPosition.setMag(4);
+        newPosition.x = newPosition.x * (delta / sp);
+        newPosition.y = newPosition.y * (delta / sp);
 
-        else {
-            let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
-            newPosition.setMag(4);
-            newPosition.x = newPosition.x * (delta / 25);
-            newPosition.y = newPosition.y * (delta / 25);
+        bubble.position.x += newPosition.x;
+        bubble.position.y += newPosition.y;
 
-            players[i].x += newPosition.x;
-            players[i].y += newPosition.y;
+        //bubble.position = createVector(self.x, self.y);
+        bubble.radius = self.radius;
 
-            bubble.position = createVector(players[i].x, players[i].y);
-            bubble.radius = players[i].radius;
-        }
+        if (bubble.position.x > 3000 - bubble.radius) { bubble.position.x = 3000 - bubble.radius}
+        else if (bubble.position.x < -3000 + bubble.radius) { bubble.position.x = -3000 + bubble.radius}
+        if (bubble.position.y > 3000 - bubble.radius) { bubble.position.y = 3000 - bubble.radius}
+        else if (bubble.position.y < -3000 + bubble.radius) { bubble.position.y = -3000 + bubble.radius}
     }
 ```
 
 ### Interpolation
+L'interpolation s'utilise sur les autres joueurs, une implémentation naïve des autres joueurs serait de tout simplement afficher les joueurs à leur nouvelle position a chaque update du serveur, mais cela mène à un rendu très saccadé. La solution apportée est d'enregistrer la dernière position des joueurs et celle tout juste obtenue du serveur et d'interpoler entre les deux pour afficher le mouvement. Cela veut dire que nous affichons les joueurs adverses légèrement en retard par rapport au serveur, mais cet algorithme nous permet de rendre le jeu plus fluide et de réduire les saccades.
 
+Interpolation :
 ```javascript
 for (let i = 0; i < players.length; i++) {
         if (players[i].id === bubble.id) { continue; }
         else {
-
-            let amount = 0.1 * (delta / 50);
+            let amount = 1 / (60 / document.getElementById("nbUpdate").value);
 
             let lastPosition = createVector(players[i].previousX, players[i].previousY);
             let newPosition = createVector(players[i].x, players[i].y);
@@ -127,6 +131,21 @@ for (let i = 0; i < players.length; i++) {
             fill(players[i].color.r, players[i].color.g, players[i].color.b);
             ellipse(players[i].previousX, players[i].previousY, players[i].radius * 2);
         }
+    }
+```
+
+### Réconciliation
+Le but de la réconciliation est de rendre plus fluide les déplacements du joueur, elle permet d'avoir un mouvement fluide entre la postion actuelle et la position désirée, cela évite au joueur d'avoir de trop gros "sauts" lors des updtaes du serveur. Couplée avec la prédiction client, la réconciliation permets de corriger les erreurs de prédiction de manière plus fluide, évitant ainsi les saccades.
+
+Réconciliation :
+```javascript
+if (alive) {
+        let serverPosition = createVector(self.x, self.y);
+        let clientPosition = createVector(bubble.position.x, bubble.position.y);
+
+        let nextPosition = p5.Vector.lerp(clientPosition, serverPosition, 0.1);
+
+        bubble.position = nextPosition;
     }
 ```
 
