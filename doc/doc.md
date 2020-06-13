@@ -2,7 +2,7 @@
 
 ## Introduction 
 
-Le but de ce TER est de mettre en place des algorithmes de détection et de correction de latence, sur un jeu multijoueur réactif en ligne, puis de tester leurs efficacités et leurs limites. Pour ce faire nous avons recréer un jeu de type "argar.io" et allons travailler dessus. Nous utiliserons des algoritmes tel que "Client prediction" et "Client interpolation", nous les testerons avec des latences élevées et/ou variables, ainsi qu'avec une multitude de joueurs pour découvrir leurs limites.
+Le but de ce TER est de mettre en place des algorithmes de détection et de correction de latence, sur un jeu multijoueur réactif en ligne, puis de tester leurs efficacités et leurs limites. Pour ce faire nous avons recréé un jeu de type "argar.io" et allons travailler dessus. Nous utiliserons des algorithmes tel que "Client prediction" et "Client interpolation", nous les testerons avec des latences élevées et/ou variables, ainsi qu'avec une multitude de joueurs pour découvrir leurs limites.
 
 ## Technologies utilisés
 
@@ -24,13 +24,13 @@ Un grand nombre de modules sont disponibles pour Node.js et parmi ces derniers o
 
 ## Utilisation et "quick start"
 Toutes les étapes de l’utilisation du projet seront disponibles [ici](https://github.com/maxime-samak/TER-multiplayer-game#quick-start).
-Le projet est utilisable en ligne [ici](https://ter-jeux-multijoueurs.herokuapp.com/).
+Le projet est utilisable en ligne [ici](https://ter-jeu-multijoueurs.herokuapp.com/).
 
 ## Jeu multijoueurs en temps réel
-Un jeu multijoueur dis "en temps réel" est un jeu ou les joueurs jouent simultanément, ainsi si l'un se déplace, il doit se déplacé "instentanément" aussi sur les écrans des autres joueurs. Ex : FPS, agario..
+Un jeu multijoueur dit "en temps réel" est un jeu ou les joueurs jouent simultanément, ainsi si l'un se déplace, il doit se déplacer "instantanément" aussi sur les écrans des autres joueurs. Ex : FPS, agario..
 
 #### Networking serveur-client
-Notre façon de gérer les connections est assez simple. Pour commencer nous allumons le serveur, ensuite chaque client qui s'allume se connectera et s'attribue une "bulle",il envoie alors son nom et sa bulle au serveur. La liste des joueurs est mise à jour avec cette nouvelle bulle par le serveur, il l'enverra alors la nouvelle liste a tout le joueur qui recevrons les informations de cette nouvelle bulle (position, taille, couleur). Pendant la partie, les clients continue d'envoyer leurs informations, et le serveur continue de mettre a jour ses données et de les distribuer a tous les joueurs.
+Notre façon de gérer les connections est assez simple. Pour commencer, nous allumons le serveur, ensuite chaque client qui s'allume se connectera et s'attribue une "bulle", il envoie alors son nom et sa bulle au serveur. La liste des joueurs est mise à jour avec cette nouvelle bulle par le serveur, il l'enverra alors la nouvelle liste a tout le joueur qui recevrons les informations de cette nouvelle bulle (position, taille, couleur). Pendant la partie, les clients continue d'envoyer leurs informations, et le serveur continue de mettre à jour ses données et de les distribuer à tous les joueurs.
 
 
 ## Le jeu à proprement parler
@@ -45,18 +45,18 @@ Toutes les machines ne sont pas équivalentes en termes de puissance et donc de 
 Une étape essentielle du développement d'un jeu web est donc de pallier à ces inégalités qui toucheront les utilisateurs.
 
 #### Frame rate
-Prenons un exemple simple pour illustrer ce phénomène : un block se trouve sur un axe X, il se déplace sur cet axe de +1 pixel par frame. Ainsi le joueur A faisant tourner son jeu à 30 fps verra se déplacer ce block de 30 pixels sur l'axe X en 1 seconde, seulement le joueur B ayant un ordinateur plus performant et ayant 60 fps verra ce même block se déplacer de 60 pixels en 1 seconde.
+Prenons un exemple simple pour illustrer ce phénomène : un block se trouve sur un axe X, il se déplace sur cet axe de +1 pixel par frame. Ainsi le joueur A qui fait tourner son jeu à 30 fps verra se déplacer ce block de 30 pixels sur l'axe X en 1 seconde, seulement le joueur B ayant un ordinateur plus performant et ayant 60 fps verra ce même block se déplacer de 60 pixels en 1 seconde.
 Il y a là un véritable problème !
 
-Solution : pour s'assurer que notre block se déplace toujours à la même vitesse nous allons introduire le concept d'un delta de temps entre deux rafraîchissements. Cette valeur exprimé en millisecondes représente le temps écoulé entre deux itérations de notre boucle de rendu graphique.
-A 30 fps on a donc un delta d'environ 33.3ms, et à 60 fps on obtient environ 16.66ms pour notre delta on peut désormais multiplier notre valeur de déplacement (+1 sur l'axe x) par nos delta pour obtenir un mouvement à 1 pixel par seconde pour nos deux joueurs.
+Solution : pour s'assurer que notre block se déplace toujours à la même vitesse nous allons introduire le concept d'un delta de temps entre deux rafraîchissements. Cette valeur, exprimée en millisecondes, représente le temps écoulé entre deux itérations de notre boucle de rendu graphique.
+À 30 fps on a donc un delta d'environ 33.3 ms, et à 60 fps on obtient environ 16.66 ms pour notre delta, on peut désormais multiplier notre valeur de déplacement (+1 sur l'axe x) par nos delta pour obtenir un mouvement à 1 pixel par seconde pour nos deux joueurs.
 
 ![Frame rate independeance](https://github.com/maxime-samak/TER-multiplayer-game/blob/master/doc/assets/deltatime.png)
 
 Si cet exemple porte uniquement sur les frames rate il ne faut pas oublier que le même principe devrait être appliqué pour toutes valeurs subissant un changement au cours du temps de manière a assurer une cohérence du jeu pour ses joueurs.
 
 ### Modulité
-Dans notre jeu se situe a droite un menu, celui si permets de moduler les variables du client afin de pouvoir tester nos algorithmes à la volée. Ainsi il nous sera possible de simuler, dans le client, des paramètres comme la variation de latence, le type d'algortihme ou bien encore le nombre d'update qu'effectuera le serveur par seconde. 
+Dans notre jeu se situe à droite un menu, celui si permets de moduler les variables du client afin de pouvoir tester nos algorithmes à la volée. Ainsi, il nous sera possible de simuler, dans le client, des paramètres comme la variation de latence, le type d'algorithme ou bien encore le nombre d'update qu'effectuera le serveur par seconde. 
 
 ### Le client
 Le client se connecte au serveur par socket.io, il reçoit les informations nécessaires au lancement de sa partie. Par la suite, il reçoit à chaque update serveur, la liste des joueurs et leurs positions, la liste des Food, il met alors à jour ces informations. La boucle client est effectuée une fois par seconde, sa seule utilité est de calculer le vecteur de mouvement et de le transmettre au serveur pour le calcul des positions. Le calcul de ce vecteur à partir du positionnement de la souris est la seule responsabilité du client.
@@ -72,10 +72,10 @@ La boucle principale du serveur est responsable des updates, c'est elle qui lanc
 ### Hébergement sur Heroku
 
 #### Première version
-Lors de notre premier déploiement du jeu sur Heroku, l'architecture que nous utilisions était différente, le client vaait beaucoup plus de responsabilités. En enffet c'est lui qui calculer le mouvement et l'envoyais, avec le vecteur de mouvement, une fois par seconde au serveur. C'était aussi le client qui calculais les collisions entre joueurs et entre Food, et qui à chaque fois envoyais les informations au serveur. Cette architechure a soulevé un problème, les clients envoyais trop de requete au serveur, le serveur cloud Heroku était alors très rapidement surchargé et avec seulement deux joueurs nous nous retrouvions avec des décalages entre serveur et clients allant jusqu'a 10 secondes ou plus. Nous avons donc repenser notre couple serveur-client pour le passer sur l'architechure que nous avons maintenant, où le serveur est le principal responsable des fonctionnalités.
+Lors de notre premier déploiement du jeu sur Heroku, l'architecture que nous utilisions était différente, le client avait beaucoup plus de responsabilités. En effet, c'est lui qui calculer le mouvement et l'envoyais, avec le vecteur de mouvement, une fois par seconde au serveur. C'était aussi le client qui calculait les collisions entre joueurs et entre Food, et qui à chaque fois envoyais les informations au serveur. Cette architecture a soulevé un problème, les clients envoyais trop de requête au serveur, le serveur cloud Heroku était alors très rapidement surchargé et avec seulement deux joueurs nous nous retrouvions avec des décalages entre serveur et clients allant jusqu'à 10 secondes ou plus. Nous avons donc repenser notre couple serveur-client pour le passer sur l'architecture que nous avons maintenant, où le serveur est le principal responsable des fonctionnalités.
 
 #### Seconde version
-Grâce au changement pour l'architechure, présentée précédemment, le nombre de reqêtes envoyées au serveur a largement baissé, des décalages entre serveur et clients peuvent toujours se créer en particulier avec un nombre d'updates serveur elevé.
+Grâce au changement pour l'architecture, présentée précédemment, le nombre de requêtes envoyées au serveur a largement baissé, des décalages entre serveur et clients peuvent toujours se créer en particulier avec un nombre d'updates serveur élevé.
  
 
 ## Algorithmes
