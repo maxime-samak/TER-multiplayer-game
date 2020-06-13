@@ -44,7 +44,7 @@ Un grand nombre de modules sont disponibles pour node.js et parmi ces derniers o
 
 Le jeu tourne à l'aide de nodes.js utilisant socket.io pour créer une communication websocket avec un ou plusieurs clients se connectant sur le port 3000 (par défaut).
 
-![connection](/assets/images/client_server_com.png)
+![connection](../assets/images/client_server_com.png)
 
 On peut séparer la communication d'un client au serveur en trois étapes distinctes:
 
@@ -90,13 +90,13 @@ Les étapes 2 et 3 sont reproduites 10 fois par seconde (par défaut), le taux d
  Solution : pour s'assurer que notre block se déplace toujours à la même vitesse nous allons introduire un concept de delta de temps entre deux rafraîchissements. Cette valeur, exprimée en millisecondes, représente le temps écoulé entre deux itérations de notre boucle de rendu graphique. 
  À 30 fps on a donc un delta d'environ 33.3 ms, et à 60 fps on obtient environ 16.66 ms pour notre delta, on peut désormais multiplier notre valeur de déplacement (+1 sur l'axe x) par nos delta pour obtenir un mouvement à 1 pixel par seconde pour nos deux joueurs.
 
-![delta](/assets/images/deltatime.png)
+![delta](../assets/images/deltatime.png)
 
  Si cet exemple porte uniquement sur les frames rate il ne faut pas oublier que le même principe devrait être appliqué pour toutes valeurs subissant un changement au cours du temps de manière a assurer une cohérence du jeu pour l'ensemble des joueurs. 
 
 #### Calcul de la latence ####
 
-![RTT](/assets/images/RTT.png)
+![RTT](../assets/images/RTT.png)
 
 ### Autre ###
 On pourra également noter la présence d'un panneau de contrôle permettant d'activer/désactiver les codes de prédiction/interpolation/... à la volée ainsi que de modifier certains attributs du serveur.
