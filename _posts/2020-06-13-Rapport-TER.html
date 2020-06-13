@@ -63,7 +63,10 @@
             <p>
                 Le jeu tourne à l'aide de nodes.js utilisant socket.io pour créer une communication websocket avec un ou plusieurs clients se connectant sur le port 3000 (par défaut).
 
-                <img src="../resources/client_server_com" alt="connection">
+                <br>
+                    <img src="../resources/client_server_com.png" alt="connection">
+                <br>
+
                 On peut séparer la communication d'un client au serveur en trois étapes distinctes:
                 <ol> 
                     <li> Le client qui se connecte se voit affecter un identifiant unique, et est ajouté à la liste des joueurs actuellement connectés au serveur. On lui attribue également une position de départ ainsi que des informations pour la représentation de son personnage (taille, couleur, ...). </li>
@@ -110,13 +113,18 @@
             <p> Solution : pour s'assurer que notre block se déplace toujours à la même vitesse nous allons introduire un concept de delta de temps entre deux rafraîchissements. Cette valeur, exprimée en millisecondes, représente le temps écoulé entre deux itérations de notre boucle de rendu graphique. </p>
             <p> À 30 fps on a donc un delta d'environ 33.3 ms, et à 60 fps on obtient environ 16.66 ms pour notre delta, on peut désormais multiplier notre valeur de déplacement (+1 sur l'axe x) par nos delta pour obtenir un mouvement à 1 pixel par seconde pour nos deux joueurs.</p>
 
-            <img src="../resources/deltatime" alt="delta">
+            <br>
+                <img src="../resources/deltatime.png" alt="delta">
+            </br>
 
             <p> Si cet exemple porte uniquement sur les frames rate il ne faut pas oublier que le même principe devrait être appliqué pour toutes valeurs subissant un changement au cours du temps de manière a assurer une cohérence du jeu pour l'ensemble des joueurs. </p>
 
             <h4> Calcul de la latence </h4>
             <p>
-                
+
+                <br>
+                    <img src="../resources/rtt.png" alt="delta">
+                </br>
             </p>
 
             <h3> Autre </h3>
