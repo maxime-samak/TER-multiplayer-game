@@ -135,7 +135,7 @@ for (let i = 0; i < players.length; i++) {
 ```
 
 ### Réconciliation
-Le but de la réconciliation est de rendre plus fluide les déplacements du joueur, elle permet d'avoir un mouvement fluide entre la postion actuelle et la position désirée, cela évite au joueur d'avoir de trop gros "sauts" lors des updtaes du serveur. Couplée avec la prédiction client, la réconciliation permets de corriger les erreurs de prédiction de manière plus fluide, évitant ainsi les saccades.
+Le but de la réconciliation est de rendre plus fluide les déplacements du joueur, elle permet d'avoir un mouvement fluide entre la positon actuelle et la position désirée, cela évite au joueur d'avoir de trop gros "sauts" lors des updates du serveur. Couplée avec la prédiction client, la réconciliation permet de corriger les erreurs de prédiction de manière plus fluide, évitant ainsi les saccades.
 
 Réconciliation :
 ```javascript
