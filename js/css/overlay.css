@@ -1,0 +1,123 @@
+.overlay {
+    height: 100%;
+    width: 0;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    right: 0;
+    top: 0;
+    background-color: #212121; /* Black fallback color */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    transition: 0.3s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+}
+
+/* Position the content inside the overlay */
+.overlay-content {
+    position: relative;
+    top: 10%; /* 10% from the top */
+    width: 90%; /* 100% width */
+    margin: auto;
+    text-align: left;
+}
+
+/* The navigation links inside the overlay */
+.overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 36px;
+    color: #818181;
+    display: block; /* Display block instead of inline */
+    transition: 0.3s; /* Transition effects on hover (color) */
+}
+
+.overlay span {
+    padding: 0px;
+    text-decoration: none;
+    font-size: 14px;
+    color: #cccccc;
+    display: block; /* Display block instead of inline */
+    transition: 0.3s; /* Transition effects on hover (color) */
+}
+
+/* When you mouse over the navigation links, change their color */
+.overlay a:hover, .overlay a:focus {
+    color: #f1f1f1;
+}
+
+/* Position the close button (top right corner) */
+.overlay .closebtn {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+    font-size: 60px;
+}
+
+a:hover, a:focus {
+    font-size: 65px;
+}
+
+.openbtn {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+    font-size: 60px;
+}
+
+.dg ul, ul {
+    list-style:none;
+    margin :0;
+    padding: 0;
+    width: 100%;
+    clear: both
+}
+
+.dg.a {
+    float: right;
+    margin-right: 15px;
+    overflow-x: hidden
+}
+
+.dg li:not(.folder) {
+    cursor: auto;
+    height: auto; /*  ???? */
+    width: 100%;
+    line-height: 27px;
+    overflow: hidden;
+    padding: 0 4px 0 5px
+}
+
+.dg li.folder {
+    padding:0;
+    border-left:4px solid rgba(0,0,0,0)
+}
+
+.dg li.title {
+    cursor:pointer;
+    margin-left: 5%;
+}
+
+.dg .property-name {
+    cursor:default;
+    float:left;
+    clear:left;
+    width:40%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.dg .c {
+    float:left;
+    width:60%;
+    height: auto;
+}
+
+.dg .c input[type=text] {
+    border:0;
+    margin-top:4px;
+    padding:3px;
+    width:100%;
+    float:right
+}
+
+/* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+@media screen and (max-height: 450px) {
+}

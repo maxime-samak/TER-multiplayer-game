@@ -1,0 +1,167 @@
+<!doctype html>
+
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <title>TER</title>
+        <meta name="description" content="TER game" />
+
+        <!-- stylesheets <>.css -->
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet" type="text/css" href="css/overlay.css" />
+
+        <!-- p5.js library -->
+        <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
+
+        <!-- chart.js library -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+    </head>
+
+    <body>
+        <div id="game">
+            <!-- Our game canvas is here -->
+        </div>
+
+        <!-- Overlay -->
+        <div id="metrics" class="overlay">
+            <!-- Button to close the overlay navigation -->
+            <a href="#" class="closebtn" onclick="closeNav()">&times;</a>
+
+            <!-- Overlay content -->
+            <div class="overlay-content" style="user-select: none;">
+                <ul style="height: auto;">
+                    <li class="folder">
+                        <div class="dg">
+                            <ul>
+                                <li class="title">Settings</li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">default (others)</span>
+                                        <input type="checkbox" id="default" name="" onclick="checkSettings(this)" checked>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">default (self)</span>
+                                        <input type="checkbox" id="self-default" name="" onclick="checkSettings(this)" checked>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">Prediction (self)</span>
+                                        <input type="checkbox" id="prediction" name="" onclick="checkSettings(this)">
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">Reconciliation</span>
+                                        <input type="checkbox" id="reconciliation" name="" onclick="checkSettings(this)">
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">Interpolation (others)</span>
+                                        <input type="checkbox" id="interpolation" name="" onclick="checkSettings(this)">
+                                    </div>
+                                </li>
+
+                                <li class="title">Drawing</li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">server POV</span>
+                                        <input type="checkbox" id="pov" name="" onclick="checkSettings(this)" checked>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="folder">
+                        <div class="dg">
+                            <ul>
+                                <li class="title">Connection</li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">latency</span>
+                                        <div id="latency" class="c" data-children-count="1">n/a</div>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">RTT (ping)</span>
+                                        <div id="ping" class="c" data-children-count="1">n/a</div>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">delay</span>
+                                        <div class="c" data-children-count="1"><input id="delay" type="number" value="0" step="25" min="0" max="500"></div>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">Server updates (s)</span>
+                                        <div class="c" data-children-count="1"><input id="nbUpdate" type="range" value="10" step="1" min="2" max="15" onchange="nbUpdateChanged()" oninput="textInput.innerHTML = nbUpdate.value">
+                                            <p id="textInput">10</p>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div>
+                                        <div id="chart" class="c" style="height: 150px; width:100%; background-color: #f1f1f1">
+                                            <canvas id="myChart" height="150px"></canvas>
+                                        </div>
+                                        <!-- <div class="c" data-children-count="1"><input type="text"></div> -->
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="folder">
+                        <div class="dg">
+                            <ul>
+                                <li class="title">Networking</li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">server time</span>
+                                        <div id="server-time" class="c" data-children-count="1"><input type="text"></div>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">client time</span>
+                                        <div id="client-time" class="c" data-children-count="1"><input type="text"></div>
+                                    </div>
+                                </li>
+                                <li class="cr number">
+                                    <div>
+                                        <span class="property-name">net offset</span>
+                                        <div class="c" data-children-count="1"><input type="text"></div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <a class="openbtn" onclick="openNav()">&#10066;</a>
+
+    </body>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- Game related scripts -->
+    <script src="game/Agar.js"></script>
+    <script src="game/Bubble.js"></script>
+
+    <!-- Other scripts -->
+    <script src="other/Client.js"></script>
+    <script src="other/Menu.js" ></script>
+    <script src="other/Latency.js" ></script>
+
+
+</html>
