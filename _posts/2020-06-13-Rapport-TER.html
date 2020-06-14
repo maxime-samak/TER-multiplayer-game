@@ -149,10 +149,47 @@ layout: default
             else if (bubble.position.y < -3000 + bubble.radius) { bubble.position.y = -3000 + bubble.radius}
         }
     </pre>
+   
+    <h3>Interpolation</h3>
+    <p>L'interpolation s'utilise sur les autres joueurs, une implémentation naïve des autres joueurs serait de tout simplement afficher les joueurs à leur nouvelle position a chaque update du serveur, mais cela mène à un rendu très saccadé. La solution apportée est d'enregistrer la dernière position des joueurs et celle tout juste obtenue du serveur et d'interpoler entre les deux pour afficher le mouvement. Cela veut dire que nous affichons les joueurs adverses légèrement en retard par rapport au serveur, mais cet algorithme nous permet de rendre le jeu plus fluide et de réduire les saccades..</p>
+    <h4>Interpolation :</h4>
+    <pre>
+        for (let i = 0; i < players.length; i++) {
+            if (players[i].id === bubble.id) { continue; }
+            else {
+                let amount = 1 / (60 / document.getElementById("nbUpdate").value);
+
+                let lastPosition = createVector(players[i].previousX, players[i].previousY);
+                let newPosition = createVector(players[i].x, players[i].y);
+
+                let currentPosition = p5.Vector.lerp(lastPosition, newPosition, amount);
+
+                players[i].previousX = currentPosition.x;
+                players[i].previousY = currentPosition.y;
+
+                fill(players[i].color.r, players[i].color.g, players[i].color.b);
+                ellipse(players[i].previousX, players[i].previousY, players[i].radius * 2);
+            }
+        }
+    </pre>
+
+    <h3>Réconciliation</h3>
+    <p>Le but de la réconciliation est de rendre plus fluide les déplacements du joueur, elle permet d'avoir un mouvement fluide entre la positon actuelle et la position désirée, cela évite au joueur d'avoir de trop gros "sauts" lors des updates du serveur. Couplée avec la prédiction client, la réconciliation permet de corriger les erreurs de prédiction de manière plus fluide, évitant ainsi les saccades.</p>
+    <h4>Réconciliation :</h4>
+    <pre>
+        if (alive) {
+            let serverPosition = createVector(self.x, self.y);
+            let clientPosition = createVector(bubble.position.x, bubble.position.y);
+
+            let nextPosition = p5.Vector.lerp(clientPosition, serverPosition, 0.1);
+
+            bubble.position = nextPosition;
+        }
+    </pre>
 
     <h2>Démo live</h2>
     <p>Cette démo live a été extraite de l'article <a href="https://www.gabrielgambetta.com/client-side-prediction-live-demo.html">suivant</a> par Gabriel Gambetta et fournis par M. Buffa. L'implémentation et les algorithmes ne sont donc pas les nôtres, mais cette démo est une représentation efficace et proche de leur efficacité, ainsi nous avons trouver perspicace de l'intégrer à ce rapport.</p>
-    <p>Cette démo vous propose de tester les trois algorithmes avec deux joueurs se déplaçant en 2D, la latence de chaque joueur est simulée et réglable, tout comme le nombre d'updates serveur par seconde.</p>
+    <p>Cette démo vous propose de tester les trois algorithmes avec deux joueurs se déplaçant en 1D, la latence de chaque joueur est simulée et réglable, tout comme le nombre d'updates serveur par seconde.</p>
 
     <div style="border: 5px solid blue; padding: 15px;">
         <p><b>Player 1 view</b> - move with LEFT and RIGHT arrow keys<br> Lag = <input type="text" id="player1_lag" size=5 value="250" onchange="updateParameters();">ms</input> · <input type="checkbox" id="player1_prediction" onchange="updateParameters();">Prediction</input> · <input type="checkbox" id="player1_reconciliation" onchange="updateParameters();">Reconciliation</input> · <input type="checkbox" id="player1_interpolation" onchange="updateParameters();">Interpolation</input></p>
