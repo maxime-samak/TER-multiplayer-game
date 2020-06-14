@@ -101,3 +101,75 @@ Les étapes 2 et 3 sont reproduites 10 fois par seconde (par défaut), le taux d
 
 ### Autre ###
 On pourra également noter la présence d'un panneau de contrôle permettant d'activer/désactiver les codes de prédiction/interpolation/... à la volée ainsi que de modifier certains attributs du serveur.
+
+## Algorithmes
+
+### Prédiction client
+Comme nous l'avons dis, c'est le serveur qui calcule la position des joueurs, le client va envoyer son vecteur de mouvement lors de sa boucle, ce message va arriver au serveur après un décalage équivalent au temps de latence, le serveur calcule puis renvoie la position au client dans sa prochaine boucle d'update, le message arrive après un nouveau décalage. Il est donc équivalent qu'en utilisant cette méthode pour calculer la position un long décalage et le joueur va bouger bien après avoir bougé la souris.
+C'est ici qu'entre en fonction l'algorithme de prédiction client:
+Le client va calculer lui-même sa position avec son vecteur de mouvement, tout en continuant à envoyer ce vecteur au serveur. Le client met à jour sa position seul ce qui évite les décalages et les "sauts" dûs à la latence.
+De son côté, le serveur calcule la position de ce même joueurs, en prenant en compte le moment de l'envoi, ainsi lorsque le serveur notifie le joueur de sa nouvelle position, celui-ci devrait déjà s'y trouver, si non, sa position est corrigé côté client, ce qui évite les différence de position entre client et serveur.
+
+Prédiciton client :
+```javascript
+if (alive) {
+        //speed
+        let sp = 20;
+
+        let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
+        newPosition.setMag(4);
+        newPosition.x = newPosition.x * (delta / sp);
+        newPosition.y = newPosition.y * (delta / sp);
+
+        bubble.position.x += newPosition.x;
+        bubble.position.y += newPosition.y;
+
+        //bubble.position = createVector(self.x, self.y);
+        bubble.radius = self.radius;
+
+        if (bubble.position.x > 3000 - bubble.radius) { bubble.position.x = 3000 - bubble.radius}
+        else if (bubble.position.x < -3000 + bubble.radius) { bubble.position.x = -3000 + bubble.radius}
+        if (bubble.position.y > 3000 - bubble.radius) { bubble.position.y = 3000 - bubble.radius}
+        else if (bubble.position.y < -3000 + bubble.radius) { bubble.position.y = -3000 + bubble.radius}
+    }
+```
+
+### Interpolation
+L'interpolation s'utilise sur les autres joueurs, une implémentation naïve des autres joueurs serait de tout simplement afficher les joueurs à leur nouvelle position a chaque update du serveur, mais cela mène à un rendu très saccadé. La solution apportée est d'enregistrer la dernière position des joueurs et celle tout juste obtenue du serveur et d'interpoler entre les deux pour afficher le mouvement. Cela veut dire que nous affichons les joueurs adverses légèrement en retard par rapport au serveur, mais cet algorithme nous permet de rendre le jeu plus fluide et de réduire les saccades.
+
+Interpolation :
+```javascript
+for (let i = 0; i < players.length; i++) {
+        if (players[i].id === bubble.id) { continue; }
+        else {
+            let amount = 1 / (60 / document.getElementById("nbUpdate").value);
+
+            let lastPosition = createVector(players[i].previousX, players[i].previousY);
+            let newPosition = createVector(players[i].x, players[i].y);
+
+            let currentPosition = p5.Vector.lerp(lastPosition, newPosition, amount);
+
+            players[i].previousX = currentPosition.x;
+            players[i].previousY = currentPosition.y;
+
+            fill(players[i].color.r, players[i].color.g, players[i].color.b);
+            ellipse(players[i].previousX, players[i].previousY, players[i].radius * 2);
+        }
+    }
+```
+
+### Réconciliation
+Le but de la réconciliation est de rendre plus fluide les déplacements du joueur, elle permet d'avoir un mouvement fluide entre la positon actuelle et la position désirée, cela évite au joueur d'avoir de trop gros "sauts" lors des updates du serveur. Couplée avec la prédiction client, la réconciliation permet de corriger les erreurs de prédiction de manière plus fluide, évitant ainsi les saccades.
+
+Réconciliation :
+```javascript
+if (alive) {
+        let serverPosition = createVector(self.x, self.y);
+        let clientPosition = createVector(bubble.position.x, bubble.position.y);
+
+        let nextPosition = p5.Vector.lerp(clientPosition, serverPosition, 0.1);
+
+        bubble.position = nextPosition;
+    }
+```
+
