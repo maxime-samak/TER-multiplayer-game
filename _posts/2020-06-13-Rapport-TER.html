@@ -120,7 +120,37 @@ layout: default
     <h3> Autre </h3>
     <p> On pourra également noter la présence d'un panneau de contrôle permettant d'activer/désactiver les codes de prédiction/interpolation/... à la volée ainsi que de modifier certains attributs du serveur.</p>
 
-        <h2>Démo live</h2>
+    <h2>Algorithmes</h2>
+    <h3>Prédiction client</h3>
+    <p>Comme nous l'avons dis, c'est le serveur qui calcule la position des joueurs, le client va envoyer son vecteur de mouvement lors de sa boucle, ce message va arriver au serveur après un décalage équivalent au temps de latence, le serveur calcule puis renvoie la position au client dans sa prochaine boucle d'update, le message arrive après un nouveau décalage. Il est donc équivalent qu'en utilisant cette méthode pour calculer la position un long décalage et le joueur va bouger bien après avoir bougé la souris.</p>
+    <p>C'est ici qu'entre en fonction l'algorithme de prédiction client :</p>
+    <p>Le client va calculer lui-même sa position avec son vecteur de mouvement, tout en continuant à envoyer ce vecteur au serveur. Le client met à jour sa position seul ce qui évite les décalages et les "sauts" dûs à la latence.</p>
+    <p>De son côté, le serveur calcule la position de ce même joueurs, en prenant en compte le moment de l'envoi, ainsi lorsque le serveur notifie le joueur de sa nouvelle position, celui-ci devrait déjà s'y trouver, si non, sa position est corrigé côté client, ce qui évite les différence de position entre client et serveur.</p>
+    <h4>Prédiction client :</h4>
+    <pre>
+        if (alive) {
+            //speed
+            let sp = 20;
+
+            let newPosition = createVector(mouseX - width / 2, mouseY - height / 2);
+            newPosition.setMag(4);
+            newPosition.x = newPosition.x * (delta / sp);
+            newPosition.y = newPosition.y * (delta / sp);
+
+            bubble.position.x += newPosition.x;
+            bubble.position.y += newPosition.y;
+
+            //bubble.position = createVector(self.x, self.y);
+            bubble.radius = self.radius;
+
+            if (bubble.position.x > 3000 - bubble.radius) { bubble.position.x = 3000 - bubble.radius}
+            else if (bubble.position.x < -3000 + bubble.radius) { bubble.position.x = -3000 + bubble.radius}
+            if (bubble.position.y > 3000 - bubble.radius) { bubble.position.y = 3000 - bubble.radius}
+            else if (bubble.position.y < -3000 + bubble.radius) { bubble.position.y = -3000 + bubble.radius}
+        }
+    </pre>
+
+    <h2>Démo live</h2>
     <p>Cette démo live a été extraite de l'article <a href="https://www.gabrielgambetta.com/client-side-prediction-live-demo.html">suivant</a> par Gabriel Gambetta et fournis par M. Buffa. L'implémentation et les algorithmes ne sont donc pas les nôtres, mais cette démo est une représentation efficace et proche de leur efficacité, ainsi nous avons trouver perspicace de l'intégrer à ce rapport.</p>
     <p>Cette démo vous propose de tester les trois algorithmes avec deux joueurs se déplaçant en 2D, la latence de chaque joueur est simulée et réglable, tout comme le nombre d'updates serveur par seconde.</p>
 
