@@ -175,6 +175,7 @@ if (alive) {
 
 ### Démo ###
 
-{% include demo.html %}
-{{ includeGuts | replace: '    ', ''}}
+<div>
+    {% include demo.html %}
+</div>
 
