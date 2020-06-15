@@ -16,7 +16,18 @@ Encadrant : Michel Buffa
 
 ### Présentation du sujet ###
 
-Le but de ce TER est de mettre en place des algorithmes de détection et de correction de latence, sur un jeu multijoueur réactif en ligne, puis de tester leurs efficacités et leurs limites. Pour ce faire, nous avons recréé un jeu de type "argar.io" et allons travailler dessus. Nous utiliserons des algorithmes tel que "Prediction" et "Interpolation", nous les testerons avec des latences élevées et/ou variables, ainsi qu'avec une multitude de joueurs pour découvrir leurs limites.
+Le but de ce projet consistait à développer, à l'aide des pistes fournis pas M. Buffa, un jeu multijoueurs à 60 images/secondes, le plus réactif possible. Dans notre cas, un clone du jeu en ligne <a href="http://agar.io">agar.io</a>. Le jeu devait pouvoir être hébergé dans le cloud et être jouable par plusieurs joueurs (16+ joueurs dans une partie). De plus des mesures de latence et de bande passante précises pour évaluer le nombre de joueurs maximal (ou plug généralement d’entités synchronisées) pour une bande passante donnée, avant que ce ne soit injouable, même avec les meilleurs algorithmes font également partie des attentes pour ce projet.
+
+Anisi le travail à effectuer relevait principalement d'établir une architecture client <-> serveur répondant à la demande d'une grande rapidité pour permettre à un jeu multijoueur type arcade d'y être jouable. De même que des algorithmes de prédiction, réconciliation, ... pour conserver un jeu fluide et "agréable" même lors de pics de latence ou plus généralement dans le cas d'une "mauvaise connection".
+
+#### Le sujet en quelques images ####
+
+<img src="{{site.baseurl}}/assets/gifs/default_draw.gif" alt="default">
+<img src="{{site.baseurl}}/assets/gifs/prediction_draw.gif" alt="prediction">
+<img src="{{site.baseurl}}/assets/gifs/prediction_and_reconciliation_draw.gif" alt="prediction and reconciliation">
+
+##### Note #####
+Tous les gifs ci-dessus ont été capturé à 60 fps.
 
 ## Technologies utilisés ##
 
@@ -99,12 +110,12 @@ Les étapes 2 et 3 sont reproduites 10 fois par seconde (par défaut), le taux d
 
 <img src="{{site.baseurl}}/assets/images/RTT.png" alt="Round trip time (RTT)">
 
-### Autre ###
+#### Autre ####
 On pourra également noter la présence d'un panneau de contrôle permettant d'activer/désactiver les codes de prédiction/interpolation/... à la volée ainsi que de modifier certains attributs du serveur.
 
-## Algorithmes
+### Algorithmes ###
 
-### Prédiction client
+#### Prédiction client ####
 Comme nous l'avons dis, c'est le serveur qui calcule la position des joueurs, le client va envoyer son vecteur de mouvement lors de sa boucle, ce message va arriver au serveur après un décalage équivalent au temps de latence, le serveur calcule puis renvoie la position au client dans sa prochaine boucle d'update, le message arrive après un nouveau décalage. Il est donc équivalent qu'en utilisant cette méthode pour calculer la position un long décalage et le joueur va bouger bien après avoir bougé la souris.
 C'est ici qu'entre en fonction l'algorithme de prédiction client:
 Le client va calculer lui-même sa position avec son vecteur de mouvement, tout en continuant à envoyer ce vecteur au serveur. Le client met à jour sa position seul ce qui évite les décalages et les "sauts" dûs à la latence.
@@ -134,7 +145,7 @@ if (alive) {
     }
 ```
 
-### Interpolation
+#### Interpolation ####
 L'interpolation s'utilise sur les autres joueurs, une implémentation naïve des autres joueurs serait de tout simplement afficher les joueurs à leur nouvelle position a chaque update du serveur, mais cela mène à un rendu très saccadé. La solution apportée est d'enregistrer la dernière position des joueurs et celle tout juste obtenue du serveur et d'interpoler entre les deux pour afficher le mouvement. Cela veut dire que nous affichons les joueurs adverses légèrement en retard par rapport au serveur, mais cet algorithme nous permet de rendre le jeu plus fluide et de réduire les saccades.
 
 Interpolation :
@@ -158,7 +169,7 @@ for (let i = 0; i < players.length; i++) {
     }
 ```
 
-### Réconciliation
+#### Réconciliation ####
 Le but de la réconciliation est de rendre plus fluide les déplacements du joueur, elle permet d'avoir un mouvement fluide entre la positon actuelle et la position désirée, cela évite au joueur d'avoir de trop gros "sauts" lors des updates du serveur. Couplée avec la prédiction client, la réconciliation permet de corriger les erreurs de prédiction de manière plus fluide, évitant ainsi les saccades.
 
 Réconciliation :
@@ -173,9 +184,12 @@ if (alive) {
     }
 ```
 
-### Démo ###
+#### Démo ####
 
 <div>
     {% include demo.html %}
 </div>
 
+## Gestion de projet ##
+
+## Conclusion

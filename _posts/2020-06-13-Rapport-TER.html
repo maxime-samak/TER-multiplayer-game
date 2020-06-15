@@ -17,8 +17,18 @@ layout: default
 
     <h3> Présentation du sujet </h3>
     <p>
-        Le but de ce TER est de mettre en place des algorithmes de détection et de correction de latence, sur un jeu multijoueur réactif en ligne, puis de tester leurs efficacités et leurs limites. Pour ce faire, nous avons recréé un jeu de type "argar.io" et allons travailler dessus. Nous utiliserons des algorithmes tel que "Prediction" et "Interpolation", nous les testerons avec des latences élevées et/ou variables, ainsi qu'avec une multitude de joueurs pour découvrir leurs limites.
+        Le but de ce projet consistait à développer, à l'aide des pistes fournis pas M. Buffa, un jeu multijoueurs à 60 images/secondes, le plus réactif possible. Dans notre cas, un clone du jeu en ligne <a href="http://agar.io">agar.io</a>. Le jeu devait pouvoir être hébergé dans le cloud et être jouable par plusieurs joueurs (16+ joueurs dans une partie). De plus des mesures de latence et de bande passante précises pour évaluer le nombre de joueurs maximal (ou plug généralement d’entités synchronisées) pour une bande passante donnée, avant que ce ne soit injouable, même avec les meilleurs algorithmes font également partie des attentes pour ce projet.
     </p>
+    <p>
+        Anisi le travail à effectuer relevait principalement d'établir une architecture client <-> serveur répondant à la demande d'une grande rapidité pour permettre à un jeu multijoueur type arcade d'y être jouable. De même que des algorithmes de prédiction, réconciliation, ... pour conserver un jeu fluide et "agréable" même lors de pics de latence ou plus généralement dans le cas d'une "mauvaise connection".
+    </p>
+
+    <div>
+        <img src="{{site.baseurl}}/assets/gifs/default_draw.gif" alt="default">
+        <img src="{{site.baseurl}}/assets/gifs/prediction_draw.gif" alt="prediction">
+        <img src="{{site.baseurl}}/assets/gifs/prediction_and_reconciliation_draw.gif" alt="prediction and reconciliation">
+    </div>
+
 </div>
 
 <div>
@@ -54,7 +64,6 @@ layout: default
 
         <br>
         <img src="{{site.baseurl}}/assets/images/client_server_com.png" alt="connection">
-        <img src="/assets/images/RTT.png" alt="">
         <br>
 
         On peut séparer la communication d'un client au serveur en trois étapes distinctes:
@@ -89,7 +98,6 @@ layout: default
         </ul>
     </p>
     <p> La centralisation de la logique permet à la fois d'éviter toute triche de la part des joueurs, ainsi que de limiter les échanges nécessaires pour faire tourner correctement le jeu (ce choix d'architecture sera détaillé ultérieurement dans le rapport). </p>
-
 
     <h3> Hardware et Browser </h3>
     <p> Toutes les machines ne sont pas équivalentes en termes de puissance et donc de rapidité, il en va de même pour les browsers qui de par leurs spécificités propres n'auront pas toujours la même efficacité pour une tâche donnée. </p>
