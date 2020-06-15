@@ -4,7 +4,7 @@ layout: default
 ---
 
 
-## Introduction
+## Introduction ###
 ### Présentation du groupe ###
 Encadrant : Michel Buffa 
 
@@ -55,7 +55,7 @@ On peut séparer la communication d'un client au serveur en trois étapes distin
 Les étapes 2 et 3 sont reproduites 10 fois par seconde (par défaut), le taux de rafraîchissement du serveur est modifiable via un curseur sur l'interface client.
 
 
-#### Client ####
+### Client ####
  Le client est la partie du jeu qui s'ouvre dans votre browser, il a la charge de communiquer avec le serveur et de toute la partie graphique du jeu à savoir :
     
 1. Le rendu visuel du jeu sur un canvas 
@@ -65,7 +65,7 @@ Les étapes 2 et 3 sont reproduites 10 fois par seconde (par défaut), le taux d
 
  De plus c'est le client qui à l'aide d'algorithmes de prédiction va permettre à l'utilisateur d'avoir une sensation d'agir sur le jeu instantanément à partir d'une dizaine (voir moins) d'updates du serveur à la seconde. Ainsi on pourra même conserver une impression d'avoir 60 fps avec seulement 3 ou 4 updates dans le pire des cas. 
 
-#### Serveur ####
+### Serveur ####
  C'est sur le serveur que toute la logique du jeu va s'opérer, à partir des directions envoyés par les clients, il va calculer les nouvelles positions des joueurs et changer l'état du jeu en conséquence. 
  
  A chaque update le serveur procède aux opérations suivantes:
@@ -172,4 +172,8 @@ if (alive) {
         bubble.position = nextPosition;
     }
 ```
+
+### Démo ###
+
+{% include demo.html %}
 
