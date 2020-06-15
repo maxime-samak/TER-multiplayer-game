@@ -20,13 +20,16 @@ layout: default
         Le but de ce projet consistait à développer, à l'aide des pistes fournis pas M. Buffa, un jeu multijoueurs à 60 images/secondes, le plus réactif possible. Dans notre cas, un clone du jeu en ligne <a href="http://agar.io">agar.io</a>. Le jeu devait pouvoir être hébergé dans le cloud et être jouable par plusieurs joueurs (16+ joueurs dans une partie). De plus des mesures de latence et de bande passante précises pour évaluer le nombre de joueurs maximal (ou plug généralement d’entités synchronisées) pour une bande passante donnée, avant que ce ne soit injouable, même avec les meilleurs algorithmes font également partie des attentes pour ce projet.
     </p>
     <p>
-        Anisi le travail à effectuer relevait principalement d'établir une architecture client <-> serveur répondant à la demande d'une grande rapidité pour permettre à un jeu multijoueur type arcade d'y être jouable. De même que des algorithmes de prédiction, réconciliation, ... pour conserver un jeu fluide et "agréable" même lors de pics de latence ou plus généralement dans le cas d'une "mauvaise connection".
+        Ainsi le travail à effectuer relevait principalement d'établir une architecture client <-> serveur répondant à la demande d'une grande rapidité pour permettre à un jeu multijoueur type arcade d'y être jouable. De même que des algorithmes de prédiction, réconciliation, ... pour conserver un jeu fluide et "agréable" même lors de pics de latence ou plus généralement dans le cas d'une "mauvaise connection".
     </p>
 
-    <div>
+    <h3> Le sujet en quelques images </h3>
+    <br>
         <img src="{{site.baseurl}}/assets/gifs/default_draw.gif" alt="default" width="200" height="180">
         <img src="{{site.baseurl}}/assets/gifs/prediction_draw.gif" alt="prediction" width="200" height="180">
         <img src="{{site.baseurl}}/assets/gifs/prediction_and_reconciliation_draw.gif" alt="prediction and reconciliation" width="200" height="180">
+        <p> Tous les gifs ci-dessus ont été capturé à 60 fps</p>
+        <br> </br>
     </div>
 
 </div>
@@ -119,22 +122,24 @@ layout: default
 
     <h4> Calcul de la latence </h4>
     <p>
-
-        <br>
-            <img src="{{site.baseurl}}/assets/images/RTT.png" alt="Round trip time (RTT)">
-        </br>
+        Un point essentiel lors du dèveloppement et l'usage d'un tel jeu est de pouvoir obtenir des informations fiables sur la latence (et le RTT plus particulièrement). D'un browser à un autre on peut avoir des résultats très différents lors d'un ping test classique en raison d'erreurs d'arrondies, il est donc plus qu'intéressant de faire ce calcul sur le serveur via node.js pour avoir des valuers cohérentes.
+    </p>
+    <p>On procède de la manière suivante :</p>
+    <br>
+    <img src="{{site.baseurl}}/assets/images/RTT.png" alt="Round trip time (RTT)">
+    </br>
+    <p>La récupération des données se fait à l'aide d'un ring buffer et est affiché sous forme de courbe dynamique sur l'interface utilisateur.
     </p>
 
     <h3> Autre </h3>
     <p> On pourra également noter la présence d'un panneau de contrôle permettant d'activer/désactiver les codes de prédiction/interpolation/... à la volée ainsi que de modifier certains attributs du serveur.</p>
 
-    <h2>Algorithmes</h2>
-    <h3>Prédiction client</h3>
-    <p>Comme nous l'avons dis, c'est le serveur qui calcule la position des joueurs, le client va envoyer son vecteur de mouvement lors de sa boucle, ce message va arriver au serveur après un décalage équivalent au temps de latence, le serveur calcule puis renvoie la position au client dans sa prochaine boucle d'update, le message arrive après un nouveau décalage. Il est donc équivalent qu'en utilisant cette méthode pour calculer la position un long décalage et le joueur va bouger bien après avoir bougé la souris.</p>
+    <h3>Algorithmes</h3>
+    <h4>Prédiction client</h4>
+    <p>Comme nous l'avons dit, c'est le serveur qui calcule la position des joueurs, le client va envoyer son vecteur de mouvement lors de son gameloop, ce message va arriver au serveur après un décalage équivalent au temps de latence, le serveur calcule puis renvoie au client sa nouvelle position lors de l'update serveur suivante, le message arrive après un nouveau décalage. Il n'est donc pas convenable d'animer le mouvement d'un joueur seulement à l'aide des updates serveur en raison du grand délai entre ces dernières.</p>
     <p>C'est ici qu'entre en fonction l'algorithme de prédiction client :</p>
-    <p>Le client va calculer lui-même sa position avec son vecteur de mouvement, tout en continuant à envoyer ce vecteur au serveur. Le client met à jour sa position seul ce qui évite les décalages et les "sauts" dûs à la latence.</p>
-    <p>De son côté, le serveur calcule la position de ce même joueurs, en prenant en compte le moment de l'envoi, ainsi lorsque le serveur notifie le joueur de sa nouvelle position, celui-ci devrait déjà s'y trouver, si non, sa position est corrigé côté client, ce qui évite les différence de position entre client et serveur.</p>
-    <h4>Prédiction client :</h4>
+    <p>Le client va calculer lui-même sa prochaine position avec son vecteur de mouvement, tout en continuant à envoyer ce vecteur au serveur. Le client affiche ensuite la position prédite pour donner l'illusion d'avoir un retour instantané du serveur, on évite ainsi d'avoir à attendre un RTT complet pour pouvoir afficher la nouvelle position du joueur.</p>
+    <p>Lors de la prochaine update serveur le joueur devrait donc déjà se trouver à l'emplacement calculé par le serveur. Cependant pour diverses raisons tel qu'un lag coté client ou un pic de charge coté serveur il est possible d'obtenir un décalage entre les deux positions c'est là qu'intervient la réconciliation.</p>
     <pre>
         if (alive) {
             //speed
@@ -158,9 +163,8 @@ layout: default
         }
     </pre>
    
-    <h3>Interpolation</h3>
-    <p>L'interpolation s'utilise sur les autres joueurs, une implémentation naïve des autres joueurs serait de tout simplement afficher les joueurs à leur nouvelle position a chaque update du serveur, mais cela mène à un rendu très saccadé. La solution apportée est d'enregistrer la dernière position des joueurs et celle tout juste obtenue du serveur et d'interpoler entre les deux pour afficher le mouvement. Cela veut dire que nous affichons les joueurs adverses légèrement en retard par rapport au serveur, mais cet algorithme nous permet de rendre le jeu plus fluide et de réduire les saccades..</p>
-    <h4>Interpolation :</h4>
+    <h4>Interpolation</h4>
+    <p>L'interpolation s'utilise sur les autres joueurs, une implémentation naïve des autres joueurs serait de tout simplement afficher les joueurs à leur nouvelle position a chaque update du serveur, mais cela mène à un rendu très saccadé. La solution apportée est d'enregistrer la dernière position des joueurs et celle tout juste obtenue du serveur et d'interpoler entre les deux pour afficher le mouvement. C'est à dire calculer une liste de points entre les positions t - 2 et t - 1 et animer le mouvement en faisant se déplacer le joueur adverse grâce à ces points. Cela veut toutefois dire que nous affichons les joueurs adverses légèrement en retard par rapport à leurs positions réels (avec un bon taux de rafraichissement serveur cela ne pose aucun problème), au bénéfice d'un affichage fluide et visuellement plus agréable.</p>
     <pre>
         for (let i = 0; i < players.length; i++) {
             if (players[i].id === bubble.id) { continue; }
@@ -181,15 +185,16 @@ layout: default
         }
     </pre>
 
-    <h3>Réconciliation</h3>
-    <p>Le but de la réconciliation est de rendre plus fluide les déplacements du joueur, elle permet d'avoir un mouvement fluide entre la positon actuelle et la position désirée, cela évite au joueur d'avoir de trop gros "sauts" lors des updates du serveur. Couplée avec la prédiction client, la réconciliation permet de corriger les erreurs de prédiction de manière plus fluide, évitant ainsi les saccades.</p>
-    <h4>Réconciliation :</h4>
+    <h4>Réconciliation</h4>
+    <p>L'objectif de la réconciliation est de faire des "micro" corrections sur la position du joueur affiché par le client pour pallier aux différents décalages qui peuvent survenir lors de la prédiction, elle permet d'avoir un mouvement fluide et fiable ce qui est essentiel aux jeux de type arcade. </p>
+    <p> On va donc additioner au vecteur produit par l'algorithme de prédiction un vecteur correctif se rapprochant de la position réel du joueur (la position envoyé par le serveur). Le vecteur correctif est proportionnel au décalage entre la position réel et prédite.</p>
     <pre>
         if (alive) {
             let serverPosition = createVector(self.x, self.y);
             let clientPosition = createVector(bubble.position.x, bubble.position.y);
 
             let nextPosition = p5.Vector.lerp(clientPosition, serverPosition, 0.1);
+            //On corrige le décalage de 10% / frame
 
             bubble.position = nextPosition;
         }
@@ -199,3 +204,38 @@ layout: default
 <div>
     {% include demo.html %}
 </div>
+
+<div>
+    <h2> Gestion de projet </h2>
+
+    <h3> Organisation </h3>
+    <h4> Gestion de source </h4>
+    <p> Le projet dans son ensemble s'est accompli à l'air de GIT et github pour la gestion de source/control de version, nous sommes habitués à son utilisation et c'est donc tout naturellement que notre choix s'est porté sur GIT. De plus github offre des fonctionnalités de gestion d'issues ainsi que de Kanban facilitant l'organisation au sein du groupe. </p>
+
+    <h4> Communication et partage des tâches</h4>
+    <p> Parallèlement à github et aux issues correspondants aux tâches à réaliser nous avons ouvert un serveur discord dans le but de communiquer de manière plus "instantanée", cela nous a permis par exemple de faire des briefings/debriefings avant/après nos entretients avec M. Buffa, de plus il était plus aisé de demander et de recevoir de l'aide via salons vocaux discord. </p>
+
+    <h3> Travail réalisé </h3>
+
+    <h4>Maxime Samak</h4>
+    <p> Fonctionnalités du jeu : Prédiction, Réconciliation, UI, affichage du ping, ring buffer, settings.
+        Fonctionnalités serveur : Changement d'architecture, calcul du RTT/latence.
+        Ecriture du rapport:  Mise en place de la page github.io, graphiques et images.</p>
+
+    <h4>Rémy Munier</h4>
+    <p>Fonctionnalités du jeu : Graphismes, bordure de map, possibilités de « manger » ou d’être mangé, mode spectateur.
+        Fonctionnalités serveur : Réglage par les joueurs du « heartbeat » du serveur, Analyse des algorithmes.
+        Ecriture du rapport: Récupération et analyse des résultats.</p>
+
+    <h4>Adrien Vasseur</h4>
+    <p>
+        Pour ma part je me suis concentré surtout sur la partie serveur du projet. Ayant un peu d’expérience avec Nodejs j’ai aidé à mettre en place le serveur et la partie temps réel avec socket.io. Puis j’ai fait implémenté la plupart des éléments du jeu dans le serveur, c’est-à-dire les joueurs, les bulles, et leurs infos respectives (positions, couleurs). Enfin j’ai aidé à synchroniser tous ces élements entre le serveur et tous les clients, de sorte que les clients aient tous les mêmes informations à l’écran. Ainsi, grâce aux websockets, le serveur envoie périodiquement à tout le monde les informations nécessaires pour que le jeu fonctionne en temps réel.
+    </p>
+
+    <h4>Sabri Hallaci</h4>
+    <p> </p>
+</div>
+
+
+<h2> Conclusion </h2>
+
