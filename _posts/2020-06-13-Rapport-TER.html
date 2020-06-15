@@ -115,7 +115,7 @@ layout: default
     <p> À 30 fps on a donc un delta d'environ 33.3 ms, et à 60 fps on obtient environ 16.66 ms pour notre delta, on peut désormais multiplier notre valeur de déplacement (+1 sur l'axe x) par nos delta pour obtenir un mouvement à 1 pixel par seconde pour nos deux joueurs.</p>
 
     <br>
-    <img src="{{site.baseurl}}/assets/images/delta.png" alt="Delta">
+    <img src="{{site.baseurl}}/assets/images/deltatime.png" alt="Delta">
     </br>
 
     <p> Si cet exemple porte uniquement sur les frames rate il ne faut pas oublier que le même principe devrait être appliqué pour toutes valeurs subissant un changement au cours du temps de manière a assurer une cohérence du jeu pour l'ensemble des joueurs. </p>
@@ -199,11 +199,13 @@ layout: default
             bubble.position = nextPosition;
         }
     </pre>
+
+    <div>
+        {% include demo.html %}
+    </div>
 </div>
 
-<div>
-    {% include demo.html %}
-</div>
+
 
 <div>
     <h2> Gestion de projet </h2>
@@ -236,6 +238,8 @@ layout: default
     <p> </p>
 </div>
 
+<div>
+    <h2> Conclusion </h2>
+</div>
 
-<h2> Conclusion </h2>
 
