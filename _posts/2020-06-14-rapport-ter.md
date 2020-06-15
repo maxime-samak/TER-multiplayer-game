@@ -176,4 +176,5 @@ if (alive) {
 ### Démo ###
 
 {% include demo.html %}
+{{ includeGuts | replace: '    ', ''}}
 
