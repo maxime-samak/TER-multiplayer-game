@@ -18,10 +18,10 @@ layout: default
 
     <h2> Présentation du sujet </h2>
     <p>
-        Le but de ce projet consistait à développer, à l'aide des pistes fournis pas M. Buffa, un jeu multijoueurs à 60 images/secondes, le plus réactif possible. Dans notre cas, un clone du jeu en ligne <a href="http://agar.io">agar.io</a>. Le jeu devait pouvoir être hébergé dans le cloud et être jouable par plusieurs joueurs (16+ joueurs dans une partie). De plus des mesures de latence et de bande passante précises pour évaluer le nombre de joueurs maximal (ou plug généralement d’entités synchronisées) pour une bande passante donnée, avant que ce ne soit injouable, même avec les meilleurs algorithmes font également partie des attentes pour ce projet.
+        Le but de ce projet consistait à développer, à l'aide des pistes fournis pas M. Buffa, un jeu multijoueur à 60 images/secondes, le plus réactif possible. Dans notre cas, un clone du jeu en ligne <a href="http://agar.io">agar.io</a>. Le jeu devait pouvoir être hébergé dans le cloud et être jouable par plusieurs joueurs (16+ joueurs dans une partie). De plus des mesures de latence et de bande passante précises pour évaluer le nombre de joueurs maximal (ou plug généralement d’entités synchronisées) pour une bande passante donnée, avant que ce ne soit injouable, même avec les meilleurs algorithmes font également partie des attentes pour ce projet.
     </p>
     <p>
-        Ainsi le travail à effectuer relevait principalement d'établir une architecture client <-> serveur répondant à la demande d'une grande rapidité pour permettre à un jeu multijoueur type arcade d'y être jouable. De même que des algorithmes de prédiction, réconciliation, ... pour conserver un jeu fluide et "agréable" même lors de pics de latence ou plus généralement dans le cas d'une "mauvaise connection".
+        Ainsi, le travail à effectuer relevait principalement d'établir une architecture client <-> serveur répondant à la demande d'une grande rapidité pour permettre à un jeu multijoueur type arcade d'y être jouable. De même que des algorithmes de prédiction, réconciliation, ... pour conserver un jeu fluide et "agréable" même lors de pics de latence ou plus généralement dans le cas d'une "mauvaise connection".
     </p>
 
     <h2> Le sujet en quelques images </h2>
@@ -68,11 +68,11 @@ layout: default
         <img src="{{site.baseurl}}/assets/images/client_server_com.png" alt="connection">
         <br>
 
-        On peut séparer la communication d'un client au serveur en trois étapes distinctes:
+        On peut séparer la communication d'un client au serveur en trois étapes distinctes :
         <ol>
             <li> Le client qui se connecte se voit affecter un identifiant unique, et est ajouté à la liste des joueurs actuellement connectés au serveur. On lui attribue également une position de départ ainsi que des informations pour la représentation de son personnage (taille, couleur, ...). </li>
             <li> Le client va ensuite communiquer au serveur la direction vers laquelle il souhaite se déplacer (via tracking de la souris). Le serveur reçoit ces informations les traites et procède aux différentes modifications sur l'état du jeu. </li>
-            <li> Périodiquement le serveur va broadcaster la liste des joueurs avec leurs informations mises à jour ainsi que l'état courant du jeu. </li>
+            <li> Périodiquement, le serveur va broadcaster la liste des joueurs avec leurs informations mises à jour ainsi que l'état courant du jeu. </li>
         </ol>
         Les étapes 2 et 3 sont reproduites 10 fois par seconde (par défaut), le taux de rafraîchissement du serveur est modifiable via un curseur sur l'interface client.
     </p>
@@ -85,11 +85,11 @@ layout: default
             <li> Le rendu visuel de la courbe de latence </li>
         </ul>
     </p>
-    <p> De plus c'est le client qui à l'aide d'algorithmes de prédiction va permettre à l'utilisateur d'avoir une sensation d'agir sur le jeu instantanément à partir d'une dizaine (voir moins) d'updates du serveur à la seconde. Ainsi on pourra même conserver une impression d'avoir 60 fps avec seulement 3 ou 4 updates dans le pire des cas. </p>
+    <p> De plus c'est le client qui à l'aide d'algorithmes de prédiction va permettre à l'utilisateur d'avoir une sensation d'agir sur le jeu instantanément à partir d'une dizaine (voir moins) d'updates du serveur à la seconde. On pourra donc conserver l'impression d'avoir un jeu très fluide avec seulement 3 ou 4 updates dans le pire des cas. </p>
 
     <h2> Serveur </h2>
     <p> C'est sur le serveur que toute la logique du jeu va s'opérer, à partir des directions envoyés par les clients, il va calculer les nouvelles positions des joueurs et changer l'état du jeu en conséquence. </p>
-    <p> A chaque update le serveur procède aux opérations suivantes:
+    <p> À chaque update le serveur procède aux opérations suivantes :
         <ul>
             <li>Calcul des nouvelles positions des joueurs à l'aide des vecteurs de position envoyés</li>
             <li>Recherche de collisions entre joueurs</li>
@@ -121,7 +121,8 @@ layout: default
 
     <h3> Calcul de la latence </h3>
     <p>
-        Un point essentiel lors du dèveloppement et l'usage d'un tel jeu est de pouvoir obtenir des informations fiables sur la latence (et le RTT plus particulièrement). D'un browser à un autre on peut avoir des résultats très différents lors d'un ping test classique en raison d'erreurs d'arrondies, il est donc plus qu'intéressant de faire ce calcul sur le serveur via node.js pour avoir des valuers cohérentes.
+
+        Un point essentiel lors du développement et l'usage d'un tel jeu est de pouvoir obtenir des informations fiables sur la latence (et le RTT plus particulièrement). D'un browser à un autre, on peut avoir des résultats très différents lors d'un ping test classique en raison d'erreurs d'arrondies, il est donc plus qu'intéressant de faire ce calcul sur le serveur via node.js pour avoir des valeurs cohérentes.
     </p>
     <p> On procède de la manière suivante :</p>
     <br>
@@ -131,12 +132,12 @@ layout: default
     </p>
 
     <h2> Architecture client <-> serveur </h2>
-    <p> Un des problèmes rencontrés lors du dèveloppement de notre jeu a été le choix d'architecture de la communication et des rôles entre client et serveur. A l'origine, pensant soulager le serveur de la charge de calculs, nous avions confié la gestion de la logique du jeu aux différents clients. Ils notifiaient ensuite le serveur du changement de l'état du jeu, serveur qui par la suite diffusait l'information aux autres clients. <br>
-    Le serveur n'avait ainsi qu'un rôle de relai entre les différents clients.</p>
-    <p> C'est lors du premier passage sur Heroku que nous avons pu constater notre erreur (en raison de la faible puissance de calcul des. Si en effet le serveur se voyait soulagé de la charge de calcul, il était toutefois submergé (et donc fortement ralenti) par l'envoie d'informations des clients, ce phénomène s'intensifiant avec le nombre de joueurs concurrents. Cela avait pour effet de retarder l'ensemble des envoies d'information du serveur vers les clients, provoquant des incohérences entre les états de jeu des différents clients. Le jeu était donc "injouable".</p>
-    <p> Nous avons donc du repenser notre architecture, et ce qui nous semblait contre intuitif au départ s'est révélé être la meilleure solution.<br>
-        Le serveur était désormais en charge de toute la logique du jeu, et les clients ne faisaient que notifier le serveur de leurs intentions de mouvements.<br>
-        En réduisant de la sorte le nombre d'emits client -> serveur d'environ 80-90% nous avons pu considérablement améliorer la communication entre ces deux élements.
+    <p> Un des problèmes rencontrés lors du développement de notre jeu a été le choix d'architecture de la communication et des rôles entre client et serveur. À l'origine, pensant soulager le serveur de la charge de calculs, nous avions confié la gestion de la logique du jeu aux différents clients. Ils notifiaient ensuite le serveur du changement de l'état du jeu, serveur qui par la suite diffusait l'information aux autres clients.<br>
+        Le serveur n'avait ainsi qu'un rôle de relais entre les différents clients.</p>
+    <p> C'est lors du premier passage sur Heroku que nous avons pu constater notre erreur (en raison de la faible puissance de calcul fourni par Heroku). Si en effet le serveur se voyait soulagé de la charge de calcul, il était toutefois submergé (et donc fortement ralenti) par l'envoi d'informations des clients, ce phénomène s'intensifiant avec le nombre de joueurs concurrents. Cela avait pour effet de retarder l'ensemble des envois d'information du serveur vers les clients, provoquant des incohérences entre les états de jeu des différents clients. Le jeu était donc "injouable".</p>
+    <p> Nous avons donc du repenser notre architecture, et ce qui nous semblait contre intuitif au départ s'est révélé être la meilleure solution. <br>
+        Le serveur était désormais en charge de toute la logique du jeu, et les clients ne faisaient que notifier le serveur de leurs intentions de mouvements. <br>
+        En réduisant de la sorte le nombre d'emits client -> serveur d'environ 80-90% nous avons pu considérablement améliorer la vitesse de communication entre ces deux éléments.
     </p>
     <br>
     <img src="{{site.baseurl}}/assets/images/architecture.png" alt="architecture">
@@ -147,7 +148,7 @@ layout: default
     <p>Comme nous l'avons dit, c'est le serveur qui calcule la position des joueurs, le client va envoyer son vecteur de mouvement lors de son gameloop, ce message va arriver au serveur après un décalage équivalent au temps de latence, le serveur calcule puis renvoie au client sa nouvelle position lors de l'update serveur suivante, le message arrive après un nouveau décalage. Il n'est donc pas convenable d'animer le mouvement d'un joueur seulement à l'aide des updates serveur en raison du grand délai entre ces dernières.</p>
     <p>C'est ici qu'entre en fonction l'algorithme de prédiction client :</p>
     <p>Le client va calculer lui-même sa prochaine position avec son vecteur de mouvement, tout en continuant à envoyer ce vecteur au serveur. Le client affiche ensuite la position prédite pour donner l'illusion d'avoir un retour instantané du serveur, on évite ainsi d'avoir à attendre un RTT complet pour pouvoir afficher la nouvelle position du joueur.</p>
-    <p>Lors de la prochaine update serveur le joueur devrait donc déjà se trouver à l'emplacement calculé par le serveur. Cependant pour diverses raisons tel qu'un lag coté client ou un pic de charge coté serveur il est possible d'obtenir un décalage entre les deux positions c'est là qu'intervient la réconciliation.</p>
+    <p>Lors de la prochaine update serveur le joueur devrait donc déjà se trouver à l'emplacement calculé par le serveur. Cependant pour diverses raisons telles qu'un lag coté client ou un pic de charge coté serveur, il est possible d'obtenir un décalage entre les deux positions, c'est là qu'intervient la réconciliation.</p>
     <pre>
         if (alive) {
             //speed
@@ -172,7 +173,8 @@ layout: default
     </pre>
    
     <h3>Interpolation</h3>
-    <p>L'interpolation s'utilise sur les autres joueurs, une implémentation naïve des autres joueurs serait de tout simplement afficher les joueurs à leur nouvelle position a chaque update du serveur, mais cela mène à un rendu très saccadé. La solution apportée est d'enregistrer la dernière position des joueurs et celle tout juste obtenue du serveur et d'interpoler entre les deux pour afficher le mouvement. C'est à dire calculer une liste de points entre les positions t - 2 et t - 1 et animer le mouvement en faisant se déplacer le joueur adverse grâce à ces points. Cela veut toutefois dire que nous affichons les joueurs adverses légèrement en retard par rapport à leurs positions réels (avec un bon taux de rafraichissement serveur cela ne pose aucun problème), au bénéfice d'un affichage fluide et visuellement plus agréable.</p>
+    <p> L'interpolation s'utilise sur les autres joueurs, une implémentation naïve des autres joueurs serait de tout simplement afficher les joueurs à leur nouvelle position a chaque update du serveur, mais cela mène à un rendu très saccadé.<br>
+        La solution apportée est d'enregistrer la dernière position des joueurs et celle tout juste obtenue du serveur et d'interpoler entre les deux pour afficher le mouvement. C'est-à-dire calculer une liste de points entre les positions t -2 et t -1 et animer le mouvement en faisant se déplacer le joueur adverse grâce à ces points. Cela veut toutefois dire que nous affichons les joueurs adverses légèrement en retard par rapport à leurs positions réels (avec un bon taux de rafraîchissement serveur cela ne pose aucun problème), au bénéfice d'un affichage fluide et visuellement plus agréable.</p>
     <pre>
         for (let i = 0; i < players.length; i++) {
             if (players[i].id === bubble.id) { continue; }
@@ -195,7 +197,7 @@ layout: default
 
     <h3>Réconciliation</h3>
     <p>L'objectif de la réconciliation est de faire des "micro" corrections sur la position du joueur affiché par le client pour pallier aux différents décalages qui peuvent survenir lors de la prédiction, elle permet d'avoir un mouvement fluide et fiable ce qui est essentiel aux jeux de type arcade. </p>
-    <p> On va donc additioner au vecteur produit par l'algorithme de prédiction un vecteur correctif se rapprochant de la position réel du joueur (la position envoyé par le serveur). Le vecteur correctif est proportionnel au décalage entre la position réel et prédite.</p>
+    <p> On va donc additionner au vecteur produit par l'algorithme de prédiction un vecteur correctif se rapprochant de la position réel du joueur (la position envoyé par le serveur). Le vecteur correctif est proportionnel au décalage entre la position réel et prédite.</p>
     <pre>
         if (alive) {
             let serverPosition = createVector(self.x, self.y);
@@ -215,10 +217,10 @@ layout: default
     <br>
     <img src="{{site.baseurl}}/assets/images/results.png" alt="results">
     </br>
-    <p> A partir de ces données on peut observer deux choses :</p>
+    <p> À partir de ces données, on peut observer deux choses :</p>
     <ul>
         <li>L'algorithme de réconciliation joue bien son rôle de correcteur d'erreur de prédiction</li>
-        <li> A partir d'un certain point l'augmentation des updates serveur n'a plus d'influence sur l'amélioration de la jouabilité, et cela est sans doute provoqué par la charge addtionnel sur le serveur</li>
+        <li> À partir d'un certain point l'augmentation des updates serveur n'a plus d'influence sur l'amélioration de la jouabilité, et cela est sans doute provoqué par la charge addtionnel sur le serveur</li>
     </ul>
 
     <div>
@@ -239,9 +241,7 @@ layout: default
     <p> Le projet dans son ensemble a été accompli à l'aide de GIT et github pour la gestion de source/control de version, nous sommes habitués à son utilisation et c'est donc tout naturellement que notre choix s'est porté sur GIT. De plus github offre des fonctionnalités de gestion d'issues ainsi que de Kanban facilitant l'organisation au sein du groupe. </p>
 
     <h3> Communication et partage des tâches</h3>
-    <p> Parallèlement à github et aux issues correspondants aux tâches à réaliser nous avons ouvert un serveur discord dans le but de communiquer de manière plus "instantanée", cela nous a permis par exemple de faire des briefings/debriefings avant/après nos entretients avec M. Buffa, de plus il était plus aisé de demander et de recevoir de l'aide via salons vocaux discord.
-        Pour ce qui est du partage des tâches chacuns était libre de s'assigner une ou plusieurs issues en fonction de ses capacités  et de sa disponibilité, l'essentiel étant de pouvoir fermer toutes les issues d'un milestone donnée avant la date de livraison prévu.
-    </p>
+    <p> Parallèlement à github et aux issues correspondants aux tâches à réaliser nous avons ouvert un serveur discord dans le but de communiquer de manière plus "instantanée", cela nous a permis par exemple de faire des briefings/debriefings avant/après nos entretiens avec M. Buffa, de plus il était plus aisé de demander et de recevoir de l'aide via des salons vocaux discord. Pour ce qui est du partage des tâches chacun était libre de s'assigner une ou plusieurs issues en fonction de ses capacités et de sa disponibilité, l'essentiel étant de pouvoir fermer toutes les issues d'un milestone donnée avant la date de livraison prévu.</p>
 
     <h2> Travail réalisé </h2>
 
@@ -257,9 +257,7 @@ layout: default
     <p>Autre : Mise en ligne sur Heroku.</p>
 
     <h3> Adrien Vasseur </h3>
-    <p>
-        Pour ma part je me suis concentré surtout sur la partie serveur du projet. Ayant un peu d’expérience avec Nodejs j’ai aidé à mettre en place le serveur et la partie temps réel avec socket.io. Puis j’ai fait implémenté la plupart des éléments du jeu dans le serveur, c’est-à-dire les joueurs, les bulles, et leurs infos respectives (positions, couleurs). Enfin j’ai aidé à synchroniser tous ces élements entre le serveur et tous les clients, de sorte que les clients aient tous les mêmes informations à l’écran. Ainsi, grâce aux websockets, le serveur envoie périodiquement à tout le monde les informations nécessaires pour que le jeu fonctionne en temps réel.
-    </p>
+    <p> Pour ma part, je me suis concentré surtout sur la partie serveur du projet. Ayant un peu d’expérience avec Nodejs j’ai aidé à mettre en place le serveur et la partie temps réel avec socket.io. Puis j’ai fait implémenté la plupart des éléments du jeu dans le serveur, c’est-à-dire les joueurs, les bulles, et leurs infos respectives (positions, couleurs). Enfin, j’ai aidé à synchroniser tous ces éléments entre le serveur et tous les clients, de sorte que les clients aient tous les mêmes informations à l’écran. Ainsi, grâce aux websockets, le serveur envoie périodiquement à tout le monde les informations nécessaires pour que le jeu fonctionne en temps réel.</p>
 
     <h3> Sabri Hallaci </h3>
     <p> </p>
@@ -272,14 +270,13 @@ layout: default
     <h1> Conclusion </h1>
 
     <h2> Bilan </h2>
-    <p> Notre équipe est satisfaite de l'avancement du TER, même si dans tout projet il reste des points que nous aimerions améliorer ou repenser nous pensons qui est abouti. <br>
-        Ces quelques mois de dèveloppement nous on beaucoup appris sur les principaux problèmes auquelles il est possible de faire face au cours de l'élaboration d'un jeu en ligne. Et certains membres de notre équipe qui n'avaient presque jamais travaillé avec JavaScript on pu en apprendre plus sur ce langages ainsi que les différentes trechnologies gravitant autour.
-    </p>
+    <p> Notre équipe est satisfaite de l'avancement du TER, et même si dans tout projet il reste des points que nous aimerions améliorer ou repenser nous pensons qu'il est abouti.<br>
+        Ces quelques mois de développement nous on beaucoup appris sur les principaux problèmes auxquels il est possible de faire face au cours de l'élaboration d'un jeu en ligne. Et certains membres de notre équipe qui n'avaient presque jamais travaillé avec JavaScript ont pu en apprendre plus sur ce langage ainsi que les différentes technologies gravitant autour.</p>
 
     <h2> Perspectives </h2>
-    <p> Si nous avons pu étudier en détail le cas d'un jeu multijoueurs sur le web avec le modèle client - serveur, il serait assez pertinent de s'intéresser à d'autres architectures tel que le peer-to-peer que l'on peut retrouver dans des jeux comme Call of Duty, ou celle utilisé pour TitanFall avec Microsoft Azure.<br>
-        Cela pourrait nous permettre de mesurer quel degrés de modifications nous devrions apporter à nos algorithmes pour satisfaires les besoins et contraintes de ces architectures. Et dans l'ensemble nous donner une meilleure compréhension des problématiques liés aux jeux multijoueurs en ligne.
-    </p>
+    <p>
+        Si nous avons pu étudier en détail le cas d'un jeu multijoueur sur le web avec le modèle client - serveur, il serait assez pertinent de s'intéresser à d'autres architectures telles que le peer-to-peer que l'on peut retrouver dans des jeux comme Call of Duty, ou celle utilisé pour TitanFall avec Microsoft Azure.<br>
+        Cela pourrait nous permettre de mesurer quels degrés de modifications nous devrions apporter à nos algorithmes pour satisfaire les besoins et contraintes de ces architectures. Et dans l'ensemble nous donner une meilleure compréhension des problématiques liées aux jeux multijoueurs en ligne. </p>
 
 </div>
 
