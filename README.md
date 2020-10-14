@@ -77,3 +77,5 @@ Enfin taper localhost:3000 sur un navigateur pour ouvrir un client en local.
 
 ### En ligne
 Le projet est utilisable en ligne [ici](https://ter-jeu-multijoueurs.herokuapp.com/) grâce à [Heroku](https://www.heroku.com/) !
+
+### [Rapport](https://maxime-samak.github.io/TER-multiplayer-game/2020/06/13/Rapport-TER.html)
